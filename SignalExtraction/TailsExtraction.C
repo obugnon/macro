@@ -248,7 +248,7 @@ TH1* GetInvMass(const char* file, Etails pTails, Double_t minMass, Double_t maxM
 // Set manually a set of tails
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
-void AddTailsSet(Efunction fSignal=kCBExtended, Etails pTails=kPP, Efunction fBackground=kPol2Pol3, Double_t minY=-4, Double_t maxY=-2.5, Double_t minPt=0., Double_t maxPt=0.3, Double_t minFit=2.2, Double_t maxFit=4.5)
+void AddTailsSet(Efunction fSignal, Etails pTails, Efunction fBackground, Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Double_t minFit, Double_t maxFit)
 {
     std::vector<Double_t> results;
     results.push_back(1.026);
