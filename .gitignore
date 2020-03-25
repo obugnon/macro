@@ -1,0 +1,7 @@
+#ignore all root files
+*.root
+.DS_Store
+.vscode
+*.pdf
+*.xlsx
+*.txt
