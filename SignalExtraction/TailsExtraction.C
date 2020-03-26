@@ -38,8 +38,8 @@ Double_t min_y = -4.;
 Double_t max_y = -2.5;
 Double_t min_pt = 0.;
 Double_t max_pt = 0.3;
-Double_t min_mass = 2.;
-Double_t max_mass = 5.;
+Double_t minMass = 1.;
+Double_t maxMass = 5.;
 Double_t min_fit = 2.2;
 Double_t max_fit = 4.8;
 Efunction f_BackGround = kVWGQuadratic;
@@ -48,7 +48,7 @@ Etails p_tails = kEMB;
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
-void TailsExtraction_signal(const char* file=fileName, Double_t minY=min_y, Double_t maxY=max_y, Double_t minPt=min_pt, Double_t maxPt=max_pt, Double_t minMass=min_mass, Double_t maxMass=max_mass, Efunction fSignal=f_Signal, Etails pTails=p_tails, Double_t minFit=min_fit, Double_t maxFit=max_fit, Bool_t isSaved = kFALSE)
+void TailsExtraction_signal(const char* file=fileName, Double_t minY=min_y, Double_t maxY=max_y, Double_t minPt=min_pt, Double_t maxPt=max_pt, Efunction fSignal=f_Signal, Etails pTails=p_tails, Double_t minFit=min_fit, Double_t maxFit=max_fit, Bool_t isSaved = kFALSE)
 {
     std::vector<Double_t> results;
     //TVector results;
@@ -88,7 +88,7 @@ void TailsExtraction_signal(const char* file=fileName, Double_t minY=min_y, Doub
             covMatrixStatus = fitStatus->CovMatrixStatus();
 
             secur++;
-            if (secur > 5){
+            if (secur > 10){
                 cout << "______________________________" << endl;
                 cout << " The fit has not converged "    << endl;    
                 cout << "______________________________" << endl;
@@ -120,7 +120,7 @@ void TailsExtraction_signal(const char* file=fileName, Double_t minY=min_y, Doub
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
-void TailsExtraction_withBG(const char* file=fileName, Double_t minY=min_y, Double_t maxY=max_y, Double_t minPt=min_pt, Double_t maxPt=max_pt, Double_t minMass=min_mass, Double_t maxMass=max_mass, Efunction fBackground=f_BackGround, Efunction fSignal=f_Signal, Etails pTails=p_tails, Double_t minFit=min_fit, Double_t maxFit=max_fit, Bool_t isSaved = kFALSE)
+void TailsExtraction_withBG(const char* file=fileName, Double_t minY=min_y, Double_t maxY=max_y, Double_t minPt=min_pt, Double_t maxPt=max_pt, Efunction fBackground=f_BackGround, Efunction fSignal=f_Signal, Etails pTails=p_tails, Double_t minFit=min_fit, Double_t maxFit=max_fit, Bool_t isSaved = kFALSE)
 {
     std::vector<Double_t> results;
     Int_t nb_sig = GetNPar(fSignal);
