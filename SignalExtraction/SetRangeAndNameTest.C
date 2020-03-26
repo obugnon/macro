@@ -96,8 +96,8 @@ TString SetTailsName( Etails fTails, Efunction fSignal, Efunction fBackground, D
     TString s;
     if(fTails == kPP)
     {
-        if(minFit > 2. && maxFit < 4.8) s.Form("%s_%s_%s_smallRange_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), sBackground.Data(), minY, maxY, minPt, maxPt);
-        else s.Form("%s_%s_%s_largeRange_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), sBackground.Data(), minY, maxY, minPt, maxPt);
+        if(minFit < 2.4 && maxFit < 4.7) s.Form("%s_%s_%s_firstRange_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), sBackground.Data(), minY, maxY, minPt, maxPt);
+        else s.Form("%s_%s_%s_secondRange_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), sBackground.Data(), minY, maxY, minPt, maxPt);
     }
     else s.Form("%s_%s_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), minY, maxY, minPt, maxPt);
     return s; 
