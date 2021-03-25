@@ -1,7 +1,14 @@
+/*
+ *  SetRangeAndNameTest.C
+ *
+ *  Created by Ophelie Bugnon on 30/08/19.
+ *
+ */
 #include <iostream>
 #include <stdio.h>
 #include "TString.h"
-//#include "FitFunctions.C"
+
+#include "FitFunctions.C"
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
@@ -16,6 +23,13 @@ TString SetNameTest(Efunction fBackground, Efunction fSignal, Etails fTails, Dou
         case kPol2Pol3:
         sBackground = "Pol2Pol3";
         break;
+        case kDoubleExp:
+        sBackground = "DoubleExp";
+        break;
+        case kExp:
+        sBackground = "Exp";
+        break;
+
     }
     switch (fSignal)
     {
@@ -60,6 +74,7 @@ TString SetRangeName(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxP
 TString SetTailsName( Etails fTails, Efunction fSignal, Efunction fBackground, Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Double_t minFit, Double_t maxFit)
 {
     TString sSignal, sTails, sBackground;
+    TString sMassRange, sPtRange;
     switch (fBackground)
     {
         case kVWGQuadratic:
@@ -96,8 +111,14 @@ TString SetTailsName( Etails fTails, Efunction fSignal, Efunction fBackground, D
     TString s;
     if(fTails == kPP)
     {
-        if(minFit < 2.4 && maxFit < 4.7) s.Form("%s_%s_%s_firstRange_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), sBackground.Data(), minY, maxY, minPt, maxPt);
-        else s.Form("%s_%s_%s_secondRange_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), sBackground.Data(), minY, maxY, minPt, maxPt);
+        if(minFit < 2.4 && maxFit < 4.7) sMassRange = "firstRange";
+        else sMassRange = "secondRange";
+        if(maxPt<1.1) sPtRange = "0.0-1.0";
+        else if (minPt>0.9 && maxPt<8.1) sPtRange = "1.0-8.0";
+        else if (minPt>7.9) sPtRange = "8.0-15.0";
+        else sPtRange = "0.0-15.0";
+
+        s.Form("%s_%s_%s_%s_rapidity-4.0--2.5_pT%s", sSignal.Data(), sTails.Data(), sBackground.Data(), sMassRange.Data(), sPtRange.Data());
     }
     else s.Form("%s_%s_rapidity%.1f-%.1f_pT%.1f-%.1f", sSignal.Data(), sTails.Data(), minY, maxY, minPt, maxPt);
     return s; 

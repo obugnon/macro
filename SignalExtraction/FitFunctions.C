@@ -1,3 +1,9 @@
+/*
+ *  FitFunctions.C
+ *
+ *  Created by Ophelie Bugnon on 16/05/19.
+ *
+ */
 #include <vector>
 #include <stdio.h>
 #include <iostream>
@@ -9,7 +15,7 @@ Bool_t reject;
 
 enum Efunction
 {
-	kVWG = 100,	kVWGQuadratic = 200,	kPol2Pol3 = 300,
+	kVWG = 100,	kVWGQuadratic = 200, kPol2Pol3 = 300, kDoubleExp = 400, kExp = 500,
 	kCB = 10, kCBExtended = 20,	kNA60 = 30
 };
 
@@ -73,6 +79,37 @@ Double_t Pol2Pol3(Double_t *x, Double_t *par)
 
 	return par[0]*(1+par[1]*x[0]+par[2]*x[0]*x[0])/(1+par[3]*x[0]+par[4]*x[0]*x[0]+par[5]*x[0]*x[0]*x[0]);
 
+}
+
+//___________________________________________________________________________________________________________
+Double_t DoubleExp(Double_t *x, Double_t *par)
+{
+	//par[0]=Norm1
+	//par[1]=alpha1
+	//par[2]=Norm2
+	//par[3]=alpha2
+
+	if (reject && x[0] > 2.8 && x[0] < 3.8) {
+      TF1::RejectPoint();
+      return 0;
+   }
+
+   return par[0]*TMath::Exp(par[1]*x[0])+par[2]*TMath::Exp(par[3]*x[0]); 
+}
+
+//___________________________________________________________________________________________________________
+Double_t Exp(Double_t *x, Double_t *par)
+{
+	//par[0]=Norm
+	//par[1]=alpha
+
+
+	if (reject && x[0] > 2.8 && x[0] < 3.8) {
+      TF1::RejectPoint();
+      return 0;
+   }
+
+   return par[0]*TMath::Exp(par[1]*x[0]); 
 }
 
 //___________________________________________________________________________________________________________
@@ -383,7 +420,7 @@ Double_t VWGquad_DoubleNA60(Double_t *x, Double_t *par)//5 parmeters for BG and 
 }
 
 //___________________________________________________________________________________________________________
-Double_t Pol2Pol3_DoubleCBext(Double_t *x, Double_t *par)
+Double_t Pol2Pol3_DoubleCBext(Double_t *x, Double_t *par)//6 parmeters for BG and 7+1 parameters for signal
 {
   	//BackGround
   	//par[0]=Normalization
@@ -410,7 +447,7 @@ Double_t Pol2Pol3_DoubleCBext(Double_t *x, Double_t *par)
 
 
 //___________________________________________________________________________________________________________
-Double_t Pol2Pol3_DoubleNA60(Double_t *x, Double_t *par)//5 parmeters for BG and 11+1 parameters for signal
+Double_t Pol2Pol3_DoubleNA60(Double_t *x, Double_t *par)//6 parmeters for BG and 11+1 parameters for signal
 {
   	//BackGround
   	//par[0]=Normalization
@@ -439,33 +476,138 @@ Double_t Pol2Pol3_DoubleNA60(Double_t *x, Double_t *par)//5 parmeters for BG and
 	return Pol2Pol3(x,par)+DoubleNA60(x,&(par[6]));
 }
 
+//___________________________________________________________________________________________________________
+Double_t DoubleExp_DoubleCBext(Double_t *x, Double_t *par)//4 parameters for BG ans 7+1 for signals
+{
+	//BackGround
+	//par[0]=Norm1
+	//par[1]=alpha1
+	//par[2]=Norm2
+	//par[3]=alpha2
 
+	//J/psi signal
+  	//par[4]=N  Normalization
+  	//par[5]=mu  Mean
+  	//par[6]=sigma  Width
+  	//par[7]=alphaL  Alpha for the left tail
+	//par[8]=nL  n for the left tail
+	//par[9]=alphaR  Alpha for the right tail
+	//par[10]=nR  n for the right tail
 
+  	//psi' signal
+  	//par[11]=N  Normalization
+
+	return DoubleExp(x,par)+DoubleCrystalBallExtended(x,&(par[4]));
+
+}
+
+//___________________________________________________________________________________________________________
+Double_t DoubleExp_DoubleNA60(Double_t *x, Double_t *par)//4 parameters for BG ans 11+1 for signals
+{
+	//BackGround
+	//par[0]=Norm1
+	//par[1]=alpha1
+	//par[2]=Norm2
+	//par[3]=alpha2
+
+	//J/psi signal
+  	//par[4]=N  Normalization
+  	//par[5]=mu  Mean
+  	//par[6]=sigma  Width
+  	//par[7]=alphaL  Alpha for the left tail
+	//par[8]=p1 for the left tail
+	//par[9]=p2 for the left tail
+	//par[10]=p3 for the left tail
+	//par[11]=alphaR  Alpha for the right tail
+	//par[12]=p1 for the right tail
+	//par[13]=p2 for the right tail
+	//par[14]=p3 for the right tail
+
+  	//psi' signal
+  	//par[15]=N  Normalization
+
+	return DoubleExp(x,par)+DoubleNA60(x,&(par[4]));
+
+}
+//___________________________________________________________________________________________________________
+Double_t Exp_DoubleCBext(Double_t *x, Double_t *par)//4 parameters for BG ans 7+1 for signals
+{
+	//BackGround
+	//par[0]=Norm
+	//par[1]=alpha
+
+	//J/psi signal
+  	//par[2]=N  Normalization
+  	//par[3]=mu  Mean
+  	//par[4]=sigma  Width
+  	//par[5]=alphaL  Alpha for the left tail
+	//par[6]=nL  n for the left tail
+	//par[7]=alphaR  Alpha for the right tail
+	//par[8]=nR  n for the right tail
+
+  	//psi' signal
+  	//par[9]=N  Normalization
+
+	return DoubleExp(x,par)+DoubleCrystalBallExtended(x,&(par[2]));
+
+}
+
+//___________________________________________________________________________________________________________
+Double_t Exp_DoubleNA60(Double_t *x, Double_t *par)//4 parameters for BG ans 11+1 for signals
+{
+	//BackGround
+	//par[0]=Norm
+	//par[1]=alpha
+
+	//J/psi signal
+  	//par[2]=N  Normalization
+  	//par[3]=mu  Mean
+  	//par[4]=sigma  Width
+  	//par[5]=alphaL  Alpha for the left tail
+	//par[6]=p1 for the left tail
+	//par[7]=p2 for the left tail
+	//par[8]=p3 for the left tail
+	//par[9]=alphaR  Alpha for the right tail
+	//par[10]=p1 for the right tail
+	//par[11]=p2 for the right tail
+	//par[12]=p3 for the right tail
+
+  	//psi' signal
+  	//par[13]=N  Normalization
+
+	return DoubleExp(x,par)+DoubleNA60(x,&(par[2]));
+
+}
 //___________________________________________________________________________________________________________
 Int_t GetNPar(Efunction fName)
 {
 	switch (fName)
 	{
-	case kVWG:
-		return 4;
-	break;
-	
-	case kVWGQuadratic:
-	case kCB:
-		return 5;
-	break;
+		case kVWG:
+		case kDoubleExp:
+			return 4;
+		break;
 
-	case kPol2Pol3:
-		return 6;
-	break;
+		case kExp:
+			return 2;
+		break;
 	
-	case kCBExtended:
-	 	return 7;
-	break;
+		case kVWGQuadratic:
+		case kCB:
+			return 5;
+		break;
 
-	case kNA60:
-		return 11;
-	break;	
+		case kPol2Pol3:
+			return 6;
+		break;
+	
+		case kCBExtended:
+			return 7;
+		break;
+
+		case kNA60:
+			return 11;
+		break;	
 	}
 }
 

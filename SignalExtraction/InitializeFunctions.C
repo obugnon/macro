@@ -1,3 +1,10 @@
+/*
+ *  InitializeFunctions.C
+ *
+ *  Created by Ophelie Bugnon on 06/12/19.
+ *
+ */
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -9,31 +16,49 @@
 #include "TFile.h"
 
 #include "FitFunctions.C"
+
+
 //Initial parameters to fit background
 	Double_t par_VWG[4]={1., 1.235, 1.600, 2.928};
 	TString name_VWG[4]={"Norm_{VWG}", "#mu_{VWG}", "#alpha_{VWG}", "#beta_{VWG}"};
 
+    Double_t par_VWGQuadratic[5]={1., 2.3, 0.5, 0.3, -0.79}; //low pT : 0-10, 10-30, 30-50, 0-90
+    // Double_t par_VWGQuadratic[5]={1., 2.3, 0., 1.82, -0.79};//low pT : 50-70 70-90
+    // Double_t par_VWGQuadratic[5]={1., 1.9, 0.47, 0.47, 0.096};//high pT : 50-70 70-90
+
+    // Double_t par_VWGQuadratic[5]={1., 2.2, 0.22, 1.28, -3.8};//50-70 70-90
 	// Double_t par_VWGQuadratic[5]={1., 2.15, 0.5, 0.14, 0.075}; //0-90
-    // Double_t par_VWGQuadratic[5]={1., 0.59, 1.09, 0.023, 0.003}; //0-10 high pt
-	//Double_t par_VWGQuadratic[5]={1., 1.235, 1.600, 2.928, -2.894}; //50-70// 30-50
-	Double_t par_VWGQuadratic[5]={1., 2.3, 0.1, 1.82, -0.79};//70-90// 50-70 70-90
-	//Double_t par_VWGQuadratic[5]={1., 2.3, 0.1, 1.82, -0.79};//70-90
-	// Double_t par_VWGQuadratic[5]={1., 2.3, 0.5, 0.3, -0.79}; //0-10, 10-30, 30-50// 0-10, 10-30
-	//Double_t par_VWGQuadratic[5]={1., 2., 0.4, 3, -2.}; // //80-90 
-	//Double_t par_VWGQuadratic[5]={1., 1., 0.3, 0.5, -0.1}; //80-90 //
+	// Double_t par_VWGQuadratic[5]={1., 2.3, 0.1, 1.82, -0.79};//70-90
+	// Double_t par_VWGQuadratic[5]={1., 2., 0.4, 3, -2.}; // //80-90 
+	// Double_t par_VWGQuadratic[5]={1., 1., 0.3, 0.5, -0.1}; //Very high pT : 30-50, 70-90
+	// Double_t par_VWGQuadratic[5]={1., 2.3, 0.032, 1.9, -0.1}; //Very high pT : mid cent
+    // Double_t par_VWGQuadratic[5]={1., 2.9, 0.97, 0.45, 0.058}; //Very high pT : 50-70
+
+
 	TString name_VWGQuadratic[5]={"Norm_{VWG}", "#mu_{VWG}", "#alpha_{VWG}", "#beta_{VWG}", "#gamma_{VWG}"};
 
 	
-	// Double_t par_Pol2Pol3[6]={1., 1., 1., 1., 1., 1.};
+    Double_t par_Pol2Pol3[6]={1., -0.35, 0.035, 6.5, -5.1, 1.04}; //low pT : 0-10, 10-30, 30-50, 0-90
+    // Double_t par_Pol2Pol3[6]={1., 1.25, 0.45, 3.82, -3.11, 0.64};//low pT : 50-70, 70-90
+    // Double_t par_Pol2Pol3[6]={1., 1050, -250, 116, -475, 232};//high pT : 50-70, 70-90
+    // Double_t par_Pol2Pol3[6]={8.96996, -0.09, 0.666, 15.05, -11.52, 2.35}; //low pT : 70-90 
+    // Double_t par_Pol2Pol3[6]={8, 2, 0, 22., -15., 3.}; //high pT:  70-90 small range
+
+
+    // Double_t par_Pol2Pol3[6]={13., 5.01901, 0.106750, 22.2812, -15.6848, 3.13765}; //low pT : 70-90 Starlight
     // Double_t par_Pol2Pol3[6]={1., -0.37, 0.035, 46.43, -32.94, 6.57}; //0-90
-    // Double_t par_Pol2Pol3[6]={13., -0.42, 0.85, 20.50, -15.86, 3.3}; //70-90 large range
-    // Double_t par_Pol2Pol3[6]={8, 2, 0, 22., -15., 3.}; //50-70 && 70-90 small rangZ
-    // Double_t par_Pol2Pol3[6]={13., 5.01901, 0.106750, 22.2812, -15.6848, 3.13765}; //70-90 small range CB-coh CB-EMB
-    // Double_t par_Pol2Pol3[6]={8.96996, -0.09, 0.666, 15.05, -11.52, 2.35}; //70-90 small range NA60
-	// Double_t par_Pol2Pol3[6]={1., -0.35, 0.035, 6.5, -5.1, 1.04};
-    Double_t par_Pol2Pol3[6]={1., 1.25, 0.45, 3.82, -3.11, 0.64};//70-90 starlight low pt
-    // Double_t par_Pol2Pol3[6]={1., -0.28, 0.013, 21.4, -12.3, 3.};//10-30
-	TString name_Pol2Pol3[6]={"Norm", "a1", "a2", "b1", "b2", "b3"};
+    // Double_t par_Pol2Pol3[6]={1., 100, -19, 430, 100, -27}; //0-90
+    // Double_t par_Pol2Pol3[6]={13., -0.42, 0.85, 20.50, -15.86, 3.3}; // Very high pT : 10-30, 70-90 
+    // Double_t par_Pol2Pol3[6]={13., -0.68, 0.813, 1.532, -1.27, 0.25}; // Very high pT : 50-70 
+
+    TString name_Pol2Pol3[6]={"Norm", "a1", "a2", "b1", "b2", "b3"};
+
+    Double_t par_DoubleExp[4]={1265, -1.4, -0.04, -0.04}; 
+    TString name_DoubleExp[4]={"Norm1_{DoubleExp}", "#alpha1__{DoubleExp}", "Norm2_{DoubleExp}", "#alpha2__{DoubleExp}"};
+
+    Double_t par_Exp[2]={1, 1}; 
+    TString name_Exp[2]={"Norm1_{DoubleExp}", "#alpha1__{DoubleExp}"};
+
 
 //Initial parameters to fit signal
 	Double_t par_jpsi[3]={1., 3.1, 0.065};
@@ -54,7 +79,12 @@
 //Get tails parameter from a file that contains vectors
 std::vector<Double_t> GetTailsParameter(TString nameTails)
 {
-    TFile* analysis = TFile::Open("~/Documents/ALICE/AnalyseJPsi/macro/SignalExtraction/Tails_PbPb_5TeV.root");
+    TFile* analysis = TFile::Open("~/Documents/ALICE/AnalyseJPsi/macro/SignalExtraction/Tails_PbPb_5TeV_weighted.root");
+    if(!analysis)
+    {
+        Error("InitializeFunctions","Cannot open Analysis File Tails_PbPb_5TeV_weighted.root");
+        return;
+    }
     std::vector<Double_t> *vect;
     analysis->GetObject(Form("%s", nameTails.Data()), vect);
     std::vector<Double_t> param_tails = *vect;
@@ -89,7 +119,19 @@ TF1* BackGroundFunction(Efunction fName, Double_t xmin, Double_t xmax)
             par = par_Pol2Pol3;
 		    name_par = name_Pol2Pol3;
 		    BGFunction =  new TF1("fitBG", Pol2Pol3, xmin, xmax, GetNPar(kPol2Pol3));
-		break;    
+		break;  
+
+        case kDoubleExp:
+            par = par_DoubleExp;
+            name_par = name_DoubleExp;
+            BGFunction = new TF1("fitBG", DoubleExp, xmin, xmax, GetNPar(kDoubleExp));
+        break;
+
+        case kExp:
+            par = par_Exp;
+            name_par = name_Exp;
+            BGFunction = new TF1("fitBG", Exp, xmin, xmax, GetNPar(kExp));
+        break;
 	}
 
 	for (int i=0; i<nbPar; i++)
@@ -193,6 +235,16 @@ TF1* DistributionFunction(Efunction fBG, Efunction fSig, TString nTails, Double_
 		    par_bg = par_Pol2Pol3;
 		    name_par_bg = name_Pol2Pol3;
 		break;
+
+        case kDoubleExp:
+            par_bg = par_DoubleExp;
+            name_par_bg = name_DoubleExp;
+        break;
+
+        case kExp:
+            par_bg = par_Exp;
+            name_par_bg = name_Exp;
+        break;
 	}
 
     switch (fSig)
@@ -229,6 +281,22 @@ TF1* DistributionFunction(Efunction fBG, Efunction fSig, TString nTails, Double_
         case 330:
             fDistrib =  new TF1("fitDistrib", Pol2Pol3_DoubleNA60, xmin, xmax, GetNPar(kPol2Pol3)+GetNPar(kNA60)+1);
         break;
+
+        case 420:
+            fDistrib =  new TF1("fitDistrib", DoubleExp_DoubleCBext, xmin, xmax, GetNPar(kDoubleExp)+GetNPar(kCBExtended)+1);
+        break;
+
+        case 430:
+            fDistrib =  new TF1("fitDistrib", DoubleExp_DoubleNA60, xmin, xmax, GetNPar(kDoubleExp)+GetNPar(kNA60)+1);
+        break;
+
+        case 520:
+            fDistrib =  new TF1("fitDistrib", Exp_DoubleCBext, xmin, xmax, GetNPar(kExp)+GetNPar(kCBExtended)+1);
+        break;
+
+        case 530:
+            fDistrib =  new TF1("fitDistrib", Exp_DoubleNA60, xmin, xmax, GetNPar(kExp)+GetNPar(kNA60)+1);
+        break;
     }
 
     //Background
@@ -259,6 +327,7 @@ TF1* DistributionFunction(Efunction fBG, Efunction fSig, TString nTails, Double_
     }
     //psi2s
     fDistrib->SetParameter(nb_par_bg+nb_par_signal,par_signal2[0]);
+    fDistrib->SetParLimits(nb_par_bg+nb_par_signal,0, 200000000);
     fDistrib->SetParName(nb_par_bg+nb_par_signal,name_par_signal2[0]);
 	return fDistrib;
 }

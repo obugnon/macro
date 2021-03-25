@@ -98,13 +98,13 @@ void GetFitResults(TString rangeName, TString testName, std::vector<double> &fit
   int xBinInHistoFitResults = histoFitResults->GetXaxis()->FindFixBin(rangeName.Data());
   if(xBinInHistoFitResults == -1)
   {
-    cout<<"Range not found"<<endl;
+    // cout<<"Range not found"<<endl;
     return;
   }
   int yBinInHistoFitResults = histoFitResults->GetYaxis()->FindFixBin(testName.Data());
   if(yBinInHistoFitResults == -1)
   {
-    cout<<"test not found"<<endl;
+    // cout<<"test not found"<<endl;
     return;
   }
 

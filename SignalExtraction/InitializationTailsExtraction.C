@@ -1,3 +1,9 @@
+/*
+ *  InitializationTailsExtraction.C
+ *
+ *  Created by Ophelie Bugnon on 28/01/20.
+ *
+ */
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -12,9 +18,12 @@
 
 //___________________________________________________________________________________________________________
 // Tails parameter for LHC15o name+source_function
-	//Double_t emb_NA60[8]={-0.45,	0.01,	 0.5, 	0.26, 		2.7,	 0.0,	 0.58, 0.3}; //initial
-	Double_t emb_NA60[8]={-0.446, 0.005, 0.529, 0.256, 2.653, 0.005, 0.583, 0.254};
-	Double_t emb_CB[4]={0.87, 4.5, 2.5, 2.7}; //alphaL,nL,alphaR,nR
+	Double_t emb_NA60[8]={-1.12,	0.004,	 0.5, 	0.24, 1.93,	 0.004,	 0.62, 0.3}; //initial
+	// Double_t emb_NA60[8]={-0.446, 0.005, 0.529, 0.256, 2.653, 0.005, 0.583, 0.254};
+	Double_t emb_CB[4]={0.87, 4.5, 2.5, 2.7}; //low pt : alphaL,nL,alphaR,nR
+    // Double_t emb_CB[4]={1.2, 3.27, 2., 2.9}; //high pt : alphaL,nL,alphaR,nR
+    // Double_t emb_CB[4]={1.2, 3.8, 1.7, 3.42}; //differential rapidity : alphaL,nL,alphaR,nR
+
 	Double_t ppData_CB[4]={0.94, 36.8, 9.40, 5.3}; //initial one
 	//Double_t ppData_CB_qVWG_fitrangelarge[4] = {0.95, 21.6, 12., 1.6};
 	//Double_t ppData_CB_qVWG_fitrangesmall[4] = {0.94,36.8, 9.4, 5.3};
@@ -29,24 +38,6 @@
 	// Double_t incoherent_NA60[8] = {0.009, 0.628, 0.285, 0.012, 0.813, 0.336, -0.553, 2.449};
 	Double_t incoherent_NA60[8] = {-0.6001, 0.20903, 1.0602, 0.0311, 2.290, 0.1790 , 1.359, 0.106};
 
-
-//Initial parameters to fit background
-	Double_t par_VWG[4]={1., 1.235, 1.600, 2.928};
-	TString name_VWG[4]={"Norm_{VWG}", "#mu_{VWG}", "#alpha_{VWG}", "#beta_{VWG}"};
-
-	Double_t par_VWGQuadratic[5]={1., 2.15, 0.5, 0.14, 0.075};
-	//Double_t par_VWGQuadratic[5]={1., 1.235, 1.600, 2.928, -2.894}; //50-70// 30-50
-	//Double_t par_VWGQuadratic[5]={1., 2.3, 0.1, 1.82, -0.79};//70-90// 50-70 70-90
-	//Double_t par_VWGQuadratic[5]={1., 2.3, 0.1, 1.82, -0.79};//70-90
-	//Double_t par_VWGQuadratic[5]={1., 2.3, 0.5, 0.3, -0.79}; //0-10, 10-30, 30-50// 0-10, 10-30
-	//Double_t par_VWGQuadratic[5]={1., 2., 0.4, 3, -2.}; // //80-90 
-	//Double_t par_VWGQuadratic[5]={1., 1., 0.3, 0.5, -0.1}; //80-90 //
-	TString name_VWGQuadratic[5]={"Norm_{VWG}", "#mu_{VWG}", "#alpha_{VWG}", "#beta_{VWG}", "#gamma_{VWG}"};
-
-	
-	Double_t par_Pol2Pol3[6]={1., 1., 1., 1., 1., 1.};
-	//Double_t par_Pol2Pol3[6]={1., -0.35, 0.035, 6.5, -5.1, 1.04};
-	TString name_Pol2Pol3[6]={"Norm", "a1", "a2", "b1", "b2", "b3"};
 
 //Initial parameters to fit signal
 	Double_t par_CBjpsi[3]={1., 3.1, 0.065};
@@ -63,43 +54,6 @@
 	TString name_NA60psi[11]={"Norm_{#psi'}", "#mu_{#psi'}", "#sigma_{#psi'}", "#alpha^{L}_{#psi'}", "p1^{L}_{#psi'}", "p2^{L}_{#psi'}", "p3^{L}_{#psi'}", "#alpha^{R}_{#psi'}", "p1^{R}_{#psi'}", "p2^{R}_{#psi'}", "p3^{R}_{#psi'}"};
 	//TString name_NA60psi[3]={"Norm_{#psi'}", "#mu_{#psi'}", "#sigma_{#psi'}"};
 
-//___________________________________________________________________________________________________________
-//___________________________________________________________________________________________________________
-TF1* BackGroundFunction(Efunction fName, Double_t xmin, Double_t xmax)
-{
-	Double_t* par;
-	TString* name_par;
-	TF1* BGFunction;
-    Int_t nbPar = GetNPar(fName);
-	
-	switch (fName)
-	{
-	    case kVWG:
-		    par = par_VWG;
-		    name_par = name_VWG;
-		    BGFunction =  new TF1("fitBG", VWG, xmin, xmax, GetNPar(kVWG));
-		break;
-	
-	    case kVWGQuadratic:
-		    par = par_VWGQuadratic;
-		    name_par = name_VWGQuadratic;
-		    BGFunction =  new TF1("fitBG", VWGQuadratic, xmin, xmax, GetNPar(kVWGQuadratic));
-	    break;
-
-        case kPol2Pol3:
-            par = par_Pol2Pol3;
-		    name_par = name_Pol2Pol3;
-		    BGFunction =  new TF1("fitBG", Pol2Pol3, xmin, xmax, GetNPar(kPol2Pol3));
-		break;    
-	}
-
-	for (int i=0; i<nbPar; i++)
-	{
-		BGFunction->SetParameter(i,par[i]);
-		BGFunction->SetParName(i,name_par[i]);
-	}
-	return BGFunction;
-}
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
@@ -175,127 +129,4 @@ TF1* SignalFunction(Efunction fSig, Etails fTails, Epart fPart, Double_t xmin, D
     }
     
 	return fSignal;
-}
-
-//___________________________________________________________________________________________________________
-//___________________________________________________________________________________________________________
-TF1* DistributionFunction(Efunction fBG, Efunction fSig, Etails fTails, Double_t xmin, Double_t xmax, Bool_t isLeftFixed = kFALSE, Bool_t isRightFixed = kFALSE)
-{
-	Double_t* par_bg;
-    Double_t* par_signal1;
-    Double_t* par_signal2;
-    Double_t* par_tails;
-	TString* name_par_bg;
-    TString* name_par_signal1;
-    TString* name_par_signal2;
-
-    Int_t nb_par_bg = GetNPar(fBG);
-    Int_t nb_par_signal = GetNPar(fSig);
-    //Int_t nb_par = nb_par_bg + 2*nb_par_signal;
-    Int_t nb_par = nb_par_bg + nb_par_signal + 1;
-
-    Int_t fchoice = fBG + fSig;
-
-	TF1* fDistrib;
-    
-	
-	switch (fBG)
-	{
-	    case kVWGQuadratic:
-		    par_bg = par_VWGQuadratic;
-		    name_par_bg = name_VWGQuadratic;
-		break;
-	
-	    case kPol2Pol3:
-		    par_bg = par_Pol2Pol3;
-		    name_par_bg = name_Pol2Pol3;
-		break;
-	}
-
-    switch (fSig)
-    {
-        case kCBExtended:
-            par_signal1 = par_CBjpsi;
-            par_signal2 = par_CBpsi;
-            name_par_signal1 = name_CBjpsi;
-            name_par_signal2 = name_CBpsi;
-        
-            if (fTails == kEMB) par_tails = emb_CB;
-            else if (fTails == kPP) par_tails = ppData_CB;
-            else if (fTails == kSTARLIGHTcoh) par_tails = coherent_CB;
-            else if (fTails == kSTARLIGHTincoh) par_tails = incoherent_CB;
-        break;
-    
-        case kNA60:
-            par_signal1 = par_NA60jpsi;
-            par_signal2 = par_NA60psi;
-            name_par_signal1 = name_NA60jpsi;
-            name_par_signal2 = name_NA60psi;
-        
-            if (fTails == kEMB) par_tails = emb_NA60;
-            else if (fTails == kSTARLIGHTcoh) par_tails = coherent_NA60;
-            else if (fTails == kSTARLIGHTincoh) par_tails = incoherent_NA60;
-        break;
-    }
-
-    switch (fchoice)
-    {
-        case 220:
-            fDistrib =  new TF1("fitDistrib", VWGquad_DoubleCBext, xmin, xmax, GetNPar(kVWGQuadratic)+GetNPar(kCBExtended)+1);
-        break;
-
-        case 230:
-            fDistrib =  new TF1("fitDistrib", VWGquad_DoubleNA60, xmin, xmax, GetNPar(kVWGQuadratic)+GetNPar(kNA60)+1);
-        break;
-
-        case 320:
-            fDistrib =  new TF1("fitDistrib", Pol2Pol3_DoubleCBext, xmin, xmax, GetNPar(kPol2Pol3)+GetNPar(kCBExtended)+1);
-        break;
-
-        case 330:
-            fDistrib =  new TF1("fitDistrib", Pol2Pol3_DoubleNA60, xmin, xmax, GetNPar(kPol2Pol3)+GetNPar(kNA60)+1);
-        break;
-    }
-    //Background
-	for (int i=0; i<nb_par_bg; i++)
-	{
-        fDistrib->SetParameter(i,par_bg[i]);
-		fDistrib->SetParName(i,name_par_bg[i]);
-	}
-    //Signal
-    for (int j = 0; j < nb_par_signal; j++)
-    {
-        //Norm, mean and sigma JPsi
-        if (j < 3) 
-        {
-            fDistrib->SetParameter(j+nb_par_bg, par_signal1[j]);
-            if (j == 1 )   
-            {
-                fDistrib->SetParLimits(j+nb_par_bg,2.9,3.3);
-            }
-            if (j == 2) 
-            {
-                fDistrib->SetParLimits(j+nb_par_bg,0.04,0.1);  
-            }
-        }
-        //Tails JPsi left
-        else if ( j < 3+(nb_par_signal-3)/2)
-        {
-            if(isLeftFixed == kFALSE) fDistrib->SetParameter(j+nb_par_bg, par_tails[j-3]);
-            else fDistrib->FixParameter(j+nb_par_bg, par_tails[j-3]);
-        }
-        //Tails JPsi right
-        else
-        {
-            if(isRightFixed == kFALSE) fDistrib->SetParameter(j+nb_par_bg, par_tails[j-3]);
-            else fDistrib->FixParameter(j+nb_par_bg, par_tails[j-3]);
-        }
-        fDistrib->SetParName(j+nb_par_bg, name_par_signal1[j]);
-    }
-    //psi2s
-    fDistrib->SetParameter(nb_par_bg+nb_par_signal,par_signal2[0]);
-    fDistrib->SetParLimits(nb_par_bg+nb_par_signal,0., 10000);
-    fDistrib->SetParName(nb_par_bg+nb_par_signal,name_par_signal2[0]);
-    
-	return fDistrib;
 }

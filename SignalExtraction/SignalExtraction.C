@@ -1,3 +1,9 @@
+/*
+ *  SignalExtraction.C
+ *
+ *  Created by Ophelie Bugnon on 13/05/19.
+ *
+ */
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -5,6 +11,7 @@
 
 #include <TStyle.h>
 #include "TFile.h"
+#include "TDirectoryFile.h"
 #include "TList.h"
 #include "THnSparse.h"
 #include "TH1.h"
@@ -15,6 +22,7 @@
 #include "TString.h"
 #include "TMath.h"
 #include "TLatex.h"
+#include "TLegend.h"
 #include "TMatrixD.h"
 #include "TFitResult.h"
 
@@ -22,15 +30,22 @@
 #include "SetRangeAndNameTest.C"
 // #include "SetAndGetFitResults.C"
 
-TH1* GetInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t minPt, Double_t maxPt, Double_t minY, Double_t maxY,  Int_t minCent, Int_t maxCent);
+enum ECentralityEstimator
+{
+	kV0 = 3, kV0minus = 4, kV0plus = 5
+};
+
+TH1* GetInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t minPt, Double_t maxPt, Double_t minY, Double_t maxY,  Int_t minCent, Int_t maxCent, ECentralityEstimator estimator);
+TH1* GetSubtractedInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t minPt, Double_t maxPt,  Int_t minCent, Int_t maxCent);
 Bool_t isTailsParameter(TString nameTails);
 
 #define JPSI_MASS   3.096916
 #define PSI2S_MASS 3.686109
 
+
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
-std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent, Double_t minMass, Double_t maxMass, Efunction fBackGround, Efunction fSignal, Etails pTails, Double_t minFit, Double_t maxFit, Bool_t isDisplayed, Bool_t isSaved)
+std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent, Double_t minMass, Double_t maxMass, Efunction fBackGround, Efunction fSignal, Etails pTails, Double_t minFit, Double_t maxFit, Bool_t isDisplayed, Bool_t isSaved, ECentralityEstimator estimator)
 {
     std::vector<Double_t> results;
     Int_t nb_bg = GetNPar(fBackGround);
@@ -38,13 +53,23 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
 
     //Get Histogram
         TFile* analysis = TFile::Open(Form("%s", file));
+        if(!analysis) {
+            Error("SignalExtraction",Form("Cannot open Analysis File %s", file));
+            return results;
+        }
         TString nameTest = SetNameTest(fBackGround, fSignal, pTails, minFit, maxFit);
         TString rangeName = SetRangeName(minY, maxY, minPt, maxPt, minCent, maxCent);
         TString tailsName = SetTailsName(pTails, fSignal, fBackGround, minY, maxY, minPt, maxPt, minFit, maxFit);
+        TString rangeNameFull;
+        rangeNameFull.Form("rapidity%.1f-%.1f_pT%.2f-%.2f_centrality%d-%d", minY, maxY, minPt, maxPt, minCent, maxCent);
         if(! isTailsParameter(tailsName))return results;
 
-        TH1* invMassDist = GetInvMassHisto(analysis, minMass, maxMass, minPt, maxPt, minY, maxY, minCent, maxCent);
-        invMassDist->SetTitle(Form("test %s in range %s", nameTest.Data(), rangeName.Data()));
+        TH1* invMassDist;
+        if(fBackGround==kDoubleExp || fBackGround==kExp) invMassDist = GetSubtractedInvMassHisto(analysis, minMass, maxMass, minPt, maxPt, minCent, maxCent);
+        else invMassDist = GetInvMassHisto(analysis, minMass, maxMass, minPt, maxPt, minY, maxY, minCent, maxCent, estimator);
+        invMassDist->SetBinErrorOption(TH1::kPoisson);
+        invMassDist->SetTitle(Form("test %s in range %s", nameTest.Data(), rangeNameFull.Data()));
+        invMassDist->Draw();
 
 	//Fit Background
         TF1* BGFunction =  BackGroundFunction(fBackGround, 0., 10.);
@@ -60,7 +85,8 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
 
         do
         {
-            fitStatus1 = invMassDist->Fit("fitBG","LSN","", minFit, maxFit);
+            if(fBackGround==kDoubleExp || fBackGround==kExp) fitStatus1 = invMassDist->Fit("fitBG","SN","", 2.2, maxFit); //eventmixing : pas likelyhood
+            else fitStatus1 = invMassDist->Fit("fitBG","LSN","", 2.2, maxFit); //Direct fit
             chi21 = BGFunction->GetChisquare()/BGFunction->GetNDF();
             covMatrixStatus1 = fitStatus1->CovMatrixStatus();
               
@@ -68,8 +94,7 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
             if (secur1 > 3)  break;
             cout << "FitStatus = " << fitStatus1 << "     chi2/NDF = " << chi21 << "     cov matrix status = " << covMatrixStatus1 << endl;
         }
-        // while (fitStatus1 !=0 ||  chi21 > 2.5  || covMatrixStatus1 != 3);
-        while (fitStatus1 !=0 || covMatrixStatus1 != 3);
+        while (fitStatus1 !=0 ||  chi21 > 2.5  || covMatrixStatus1 != 3);
 
         reject = kFALSE;
 
@@ -92,13 +117,14 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
 
         do
         {
-            fitStatus = invMassDist->Fit("fitDistrib","LSN","",minFit,maxFit);
+            if(fBackGround==kDoubleExp || fBackGround==kExp) fitStatus = invMassDist->Fit("fitDistrib","S","",minFit,maxFit);//eventmixing : pas likelyhood
+            else fitStatus = invMassDist->Fit("fitDistrib","LSN","",minFit,maxFit);//Direct fit
             chi22 = fitFunction->GetChisquare()/fitFunction->GetNDF();
             covMatrixStatus2 = fitStatus->CovMatrixStatus();
             cout << "FitStatus = " << fitStatus << "     chi2/NDF = " << chi22 << "     cov matrix status = " << covMatrixStatus2 << endl;
 
             secur2++;
-            if (secur2 > 2){
+            if (secur2 > 30){
             cout << "______________________________" << endl;
             cout << " The fit has not converged "    << endl;    
             cout << "______________________________" << endl;
@@ -107,7 +133,7 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
         }
         while (fitStatus !=0 ||  chi22 > 2.5 || covMatrixStatus2 != 3);
         
-	//Draw Function
+	// Draw Function
 	    TF1 *JPsiFunction = SignalFunction(fSignal, tailsName, kJPsi, 0., 10.);
         TF1 *Psi2SFunction = SignalFunction(fSignal, tailsName, kPsi2S, 0., 10.);
         Double_t para[nb_bg+nb_sig+1];
@@ -182,46 +208,43 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
         results.push_back(covMatrixStatus2);
 
         
-    //Display 
+    // Display 
         if(isDisplayed==kTRUE)
         {
-            TCanvas* cInvMassDist = new TCanvas(Form("%s_%s",rangeName.Data(), nameTest.Data()), Form("Range %s for test %s",rangeName.Data(), nameTest.Data()));
-            //gStyle->SetOptFit(1111);
+            TCanvas* cInvMassDist = new TCanvas(Form("%s_%s",rangeNameFull.Data(), nameTest.Data()), Form("Range %s for test %s",rangeNameFull.Data(), nameTest.Data()));
+            gStyle->SetOptFit(1111);
             gStyle->SetOptFit(0);
             gStyle->SetOptStat(0);
             gStyle->SetHistLineColor(1);
+            if(minCent<70 && fBackGround!=kDoubleExp && fBackGround!=kExp)cInvMassDist->SetLogy();
 
             invMassDist->Draw();
             fitFunction->SetLineColor(kBlue);
+            fitFunction->SetRange(minFit, maxFit);
             fitFunction->Draw("SAME");
+
             BGFunction->SetLineColor(kBlue);
             BGFunction->SetLineStyle(7);
+            BGFunction->SetRange(minFit, maxFit);
             BGFunction->Draw("SAME");
             JPsiFunction->Draw("SAME");
-            Psi2SFunction->SetLineColor(8);
+            Psi2SFunction->SetLineColor(kGreen+2);
             Psi2SFunction->Draw("SAME");
 
-        //Set Legend
-            TLatex* text = new TLatex();
-            text->SetNDC();
-            text->SetTextAlign(12);
-            text->SetTextFont(43);
-            text->SetTextSize(15);
+            TLatex * tex = new TLatex(0.6, 0.85,"Work in progress");
+            tex->SetNDC();
+            tex->SetTextFont(42);
+            tex->SetTextSize(0.03);
+            tex->Draw();
+            TLegend* dlegend = new TLegend(0.5,0.57,0.87,0.8);
+            gStyle->SetLegendBorderSize(0);
+            dlegend->AddEntry((TObject*)0, "Pb-Pb collisions #sqrt{#it{s}_{NN}} = 5.02 TeV", "");
+            dlegend->AddEntry((TObject*)0,Form("%i-%i %%",minCent, maxCent),""); 
+            dlegend->AddEntry((TObject*)0,"J/#psi #rightarrow #mu^{+}#mu^{-}, -4 < #it{y} < -2.5",""); 
+            dlegend->AddEntry((TObject*)0,"#it{p}_{T} < 0.3 GeV/#it{c}",""); 
+            dlegend->AddEntry((TObject*)0, "", "");
+            dlegend->Draw();
 
-            // text->DrawLatex(0.62, 0.80, Form("%i-%i %%",minCent, maxCent));
-            // text->DrawLatex(0.62, 0.76, Form("%.2f < y < %.2f",minY, maxY));
-            // text->DrawLatex(0.62, 0.72, Form("p_{T} < %.2f GeV/c", maxPt));
-            //text->DrawLatex(0.62, 0.8, Form("N_{J/#psi} = %i #pm %i",TMath::Nint(N_JPsi),TMath::Nint(Err_JPsi)));
-
-            
-            text->DrawLatex(0.65, 0.88, Form("N_{J/#psi} = %i #pm %i",TMath::Nint(N_JPsi),TMath::Nint(Err_JPsi)));
-            for (int np = 0; np < nb_sig + 1; np++)
-            {
-               text->DrawLatex(0.65, 0.84-np*0.04, Form("%s = %.3f #pm %.3f", fitFunction->GetParName(np+nb_bg), fitFunction->GetParameter(np+nb_bg), fitFunction->GetParError(np+nb_bg)));
-            }
-            text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig-2)*0.04, Form("#chi^{2}/NDF = %.3f", chi22) );
-            text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig-1)*0.04, Form("Fit status = %i", (int)fitStatus) );
-            text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig)*0.04, Form("Cov matrix status = %i", covMatrixStatus2) );
 
             if(isSaved) cInvMassDist->SaveAs(".pdf");
         }    
@@ -232,16 +255,15 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
-TH1* GetInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t minPt, Double_t maxPt, Double_t minY, Double_t maxY,  Int_t minCent, Int_t maxCent)
+TH1* GetInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t minPt, Double_t maxPt, Double_t minY, Double_t maxY,  Int_t minCent, Int_t maxCent, ECentralityEstimator estimator)
 {
-    // TFile* analysis = TFile::Open(Form("%s", file));
     TList* diMuonHistos = (TList*)file->Get("DiMuonHistos_CMUL7");
     THnSparse* hOppositeSign = (THnSparse*)diMuonHistos->FindObject("fHistoDiMuonOS");
 
     hOppositeSign->GetAxis(0)->SetRangeUser(minMas, maxMass);
     hOppositeSign->GetAxis(1)->SetRangeUser(minPt,maxPt);
     hOppositeSign->GetAxis(2)->SetRangeUser(minY,maxY);
-    hOppositeSign->GetAxis(3)->SetRangeUser(minCent,maxCent);
+    hOppositeSign->GetAxis((int)estimator)->SetRangeUser(minCent,maxCent);
 
     TH1* invMassDist = hOppositeSign->Projection(0,"e");
     invMassDist->GetXaxis()->SetTitle("m_{#mu#mu} GeV/c^{2}");
@@ -252,9 +274,38 @@ TH1* GetInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t mi
 }
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
+TH1* GetSubtractedInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent)
+{
+    TDirectoryFile* histosByCent = (TDirectoryFile*)file->Get(Form("Cent%ito%i", minCent,maxCent));
+    TDirectoryFile* histosByRap = (TDirectoryFile*)histosByCent->Get("Rap2.5to4");
+
+    TString sPtRange;
+    if(minPt == 0 && maxPt == 0.3) sPtRange.Form("histoInvMass_Pt%.fto%.1f", minPt, maxPt);
+    else if(minPt == 0.3 && maxPt == 1) sPtRange.Form("histoInvMass_Pt%.1fto%.f", minPt, maxPt);
+    else if(minPt == 0.3 && maxPt == 0.65) sPtRange.Form("histoInvMass_Pt%.1fto%.2f", minPt, maxPt);
+    else if(minPt == 0.65 && maxPt == 1) sPtRange.Form("histoInvMass_Pt%.2fto%.f", minPt, maxPt);
+    else sPtRange.Form("histoInvMass_Pt%.fto%.f", minPt, maxPt);
+
+    TH1* histoMass = (TH1*)histosByRap->Get(sPtRange);
+    TH1* invMassDist = (TH1*)histoMass->Clone("invMassDist");
+    invMassDist->GetXaxis()->SetTitle("m_{#mu#mu} GeV/c^{2}");
+    invMassDist->GetYaxis()->SetTitle("Counts per 20 MeV/c^{2}");
+    invMassDist->Rebin(8);
+    invMassDist->GetXaxis()->SetRangeUser(minMas, maxMass);
+    invMassDist->SetTitle(" ");
+
+    return invMassDist;
+}
+//___________________________________________________________________________________________________________
+//___________________________________________________________________________________________________________
 Bool_t isTailsParameter(TString nameTails)
 {
-    TFile* analysis = TFile::Open("~/Documents/ALICE/AnalyseJPsi/macro/SignalExtraction/Tails_PbPb_5TeV.root");
+    TFile* analysis = TFile::Open("~/Documents/ALICE/AnalyseJPsi/macro/SignalExtraction/Tails_PbPb_5TeV_weighted.root");
+    if(!analysis)
+    {
+        Error("isTailsParameter","Cannot open Analysis File Tails_PbPb_5TeV_weighted.root");
+        return;
+    }
     std::vector<Double_t> *vect;
     analysis->GetObject(Form("%s", nameTails.Data()), vect);
     if(vect) return kTRUE;
