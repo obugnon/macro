@@ -1,3 +1,9 @@
+/*
+ *  WeightByRunLocally.C
+ *
+ *  Created by Ophelie Bugnon on 13/05/19.
+ *
+ */
 #include <vector>
 #include <iostream>
 #include <algorithm>

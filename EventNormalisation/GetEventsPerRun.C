@@ -1,3 +1,9 @@
+/*
+ *  GetEventsPerRun.C
+ *
+ *  Created by Ophelie Bugnon on 24/01/20.
+ *
+ */
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -49,15 +55,13 @@ const bool Contains( std::vector<int>& Vec, const int& Element )
 
 //__________________________________________________________________________________________________
 //__________________________________________________________________________________________________
-void GetEventPerRun(const char* file , TString runList )
+void GetEventPerRun(const char* file, TString runList )
 {   
     //Opening Root file
     TFile* analysis = TFile::Open(Form("~/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV/%s", file));
     if (!analysis) return;
     TList* eventHistos = (TList*)analysis->Get("EventHistos_CMUL7");
-    // TList* eventHistos = (TList*)analysis->Get("EventHistos_CAny");
     TH1I* hPSeventsPerRun = (TH1I*)eventHistos->FindObject("fHistoPSEventsPerRun");
-    // TH1I* hPSeventsPerRun = (TH1I*)eventHistos->FindObject("fHistoTotalEventsPerRun");
 
     //Creating output file
     FILE* fichier = NULL;

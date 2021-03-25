@@ -1,3 +1,9 @@
+/*
+ *  WeightByRunLocally.C
+ *
+ *  Created by Ophelie Bugnon on 11/03/20.
+ *
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
