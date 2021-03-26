@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./Style.css">
+</head>
+
+<body>
+    <div class="sidenav">
+        <a href="#cent_0-10">0-10%</a>
+    </div>
+
+    <div class="main">
+        <h2 id="cent_0-10">
+            Centrality 0-10
+        </h2>
+        <h3>
+            Summary:
+        </h3>
+        <ul>
+            <li>
+                3 iterations steps are performed
+            </li>
+            <li>
+                The largest difference in terms of fit functions between step 2 and 3 is 0.2%
+            </li>
+            <li>
+                The largest difference in terms of Acceptance&#215;efficiency between step 2 and 3 is 0.09%
+            </li>
+        </ul>
+        <h5>
+            Pt and rapidity shapes for various iterations:
+        </h5>
+        <div class="row">
+            <div class="column">
+                <img src="../Cent-0to10/FinalPlots/PtShapesVsIter.png" alt="PtShapesVsIter" style="width:90%">
+            </div>
+            <div class="column">
+                <img src="../Cent-0to10/FinalPlots/RapShapesVsIter.png" alt="RapShapesVsIter" style="width:90%">
+            </div>
+        </div>
+
+        <h5>
+            Pt and rapidity Acceptance&#215;efficiency for various iterations:
+        </h5>
+        <div class="row">
+            <div class="column">
+                <img src="../Cent-0to10/FinalPlots/PtAccEffiVsIter.png" alt="PtShapesVsIter" style="width:90%">
+            </div>
+            <div class="column">
+                <img src="../Cent-0to10/FinalPlots/RapAccEffiVsIter.png" alt="RapShapesVsIter" style="width:90%">
+            </div>
+        </div>
+        <h5>
+            Acceptance&#215;efficiency values for various iterations as a function of rapidity:
+        </h5>
+        <table class="customTable" style="width:100%">
+            <tr>
+                <th>y</th>
+                <th>AccEffi-0</th>
+                <th>AccEffi-1</th>
+                <th>1/0</th>
+                <th>AccEffi-2</th>
+                <th>2/0</th>
+            </tr>
+            <tr>
+                <td>-4.00,-3.75</td>
+                <td>0.06&plusmn;0.0017</td>
+                <td>0.06&plusmn;0.0012</td>
+                <td>0.98&plusmn;0.03</td>
+                <td>0.06&plusmn;0.0012</td>
+                <td>0.98&plusmn;0.03</td>
+            </tr>
+            <tr>
+                <td>-3.75,-3.50</td>
+                <td>0.16&plusmn;0.0025</td>
+                <td>0.16&plusmn;0.0018</td>
+                <td>1.00&plusmn;0.02</td>
+                <td>0.16&plusmn;0.0018</td>
+                <td>1.00&plusmn;0.02</td>
+            </tr>
+            <tr>
+                <td>-3.50,-3.25</td>
+                <td>0.21&plusmn;0.0028</td>
+                <td>0.21&plusmn;0.0019</td>
+                <td>1.00&plusmn;0.02</td>
+                <td>0.21&plusmn;0.0019</td>
+                <td>1.00&plusmn;0.02</td>
+            </tr>
+            <tr>
+                <td>-3.25,-3.00</td>
+                <td>0.21&plusmn;0.0026</td>
+                <td>0.21&plusmn;0.0018</td>
+                <td>0.99&plusmn;0.01</td>
+                <td>0.21&plusmn;0.0018</td>
+                <td>0.99&plusmn;0.01</td>
+            </tr>
+            <tr>
+                <td>-3.00,-2.75</td>
+                <td>0.15&plusmn;0.0019</td>
+                <td>0.15&plusmn;0.0013</td>
+                <td>1.01&plusmn;0.02</td>
+                <td>0.15&plusmn;0.0013</td>
+                <td>1.00&plusmn;0.02</td>
+            </tr>
+            <tr>
+                <td>-2.75,-2.50</td>
+                <td>0.04&plusmn;0.0009</td>
+                <td>0.04&plusmn;0.0006</td>
+                <td>0.98&plusmn;0.03</td>
+                <td>0.04&plusmn;0.0006</td>
+                <td>0.98&plusmn;0.03</td>
+            </tr>
+        </table>
+        <h5>
+            Acceptance&#215;efficiency values for various iterations as a function of pt:
+        </h5>
+        <table class='customTable' style='width:100%'>
+            <tr>
+                <th>pt (GeV/c)</th>
+                <th>AccEffi-0</th>
+                <th>AccEffi-1</th>
+                <th>1/0</th>
+                <th>AccEffi-2</th>
+                <th>2/0</th>
+            </tr>
+            <tr>
+                <td>0.30,1.00</td>
+                <td>0.13&plusmn;0.0018</td>
+                <td>0.13&plusmn;0.0013</td>
+                <td>0.99&plusmn;0.02</td>
+                <td>0.13&plusmn;0.0013</td>
+                <td>0.99&plusmn;0.02</td>
+            </tr>
+            <tr>
+                <td>1.00,2.00</td>
+                <td>0.12&plusmn;0.0013</td>
+                <td>0.11&plusmn;0.0009</td>
+                <td>0.99&plusmn;0.01</td>
+                <td>0.11&plusmn;0.0009</td>
+                <td>0.99&plusmn;0.01</td>
+            </tr>
+            <tr>
+                <td>2.00,3.00</td>
+                <td>0.12&plusmn;0.0015</td>
+                <td>0.12&plusmn;0.0011</td>
+                <td>1.01&plusmn;0.02</td>
+                <td>0.12&plusmn;0.0011</td>
+                <td>1.01&plusmn;0.02</td>
+            </tr>
+            <tr>
+                <td>3.00,4.00</td>
+                <td>0.14&plusmn;0.0025</td>
+                <td>0.14&plusmn;0.0018</td>
+                <td>1.01&plusmn;0.02</td>
+                <td>0.14&plusmn;0.0018</td>
+                <td>1.01&plusmn;0.02</td>
+            </tr>
+            <tr>
+                <td>4.00,5.00</td>
+                <td>0.18&plusmn;0.0044</td>
+                <td>0.18&plusmn;0.0030</td>
+                <td>1.00&plusmn;0.03</td>
+                <td>0.18&plusmn;0.0030</td>
+                <td>1.00&plusmn;0.03</td>
+            </tr>
+            <tr>
+                <td>5.00,6.00</td>
+                <td>0.23&plusmn;0.0074</td>
+                <td>0.22&plusmn;0.0052</td>
+                <td>0.99&plusmn;0.04</td>
+                <td>0.22&plusmn;0.0052</td>
+                <td>0.98&plusmn;0.04</td>
+            </tr>
+            <tr>
+                <td>6.00,7.00</td>
+                <td>0.28&plusmn;0.0123</td>
+                <td>0.27&plusmn;0.0085</td>
+                <td>0.99&plusmn;0.05</td>
+                <td>0.27&plusmn;0.0085</td>
+                <td>0.99&plusmn;0.05</td>
+            </tr>
+            <tr>
+                <td>7.00,8.00</td>
+                <td>0.33&plusmn;0.0202</td>
+                <td>0.32&plusmn;0.0137</td>
+                <td>0.98&plusmn;0.07</td>
+                <td>0.32&plusmn;0.0137</td>
+                <td>0.98&plusmn;0.07</td>
+            </tr>
+            <tr>
+                <td>8.00,9.00</td>
+                <td>0.35&plusmn;0.0293</td>
+                <td>0.35&plusmn;0.0203</td>
+                <td>0.98&plusmn;0.10</td>
+                <td>0.35&plusmn;0.0203</td>
+                <td>0.98&plusmn;0.10</td>
+            </tr>
+            <tr>
+                <td>9.00,10.00</td>
+                <td>0.38&plusmn;0.0420</td>
+                <td>0.37&plusmn;0.0286</td>
+                <td>0.98&plusmn;0.13</td>
+                <td>0.37&plusmn;0.0286</td>
+                <td>0.98&plusmn;0.13</td>
+            </tr>
+            <tr>
+                <td>10.00,12.00</td>
+                <td>0.39&plusmn;0.0469</td>
+                <td>0.40&plusmn;0.0334</td>
+                <td>1.02&plusmn;0.15</td>
+                <td>0.40&plusmn;0.0334</td>
+                <td>1.02&plusmn;0.15</td>
+            </tr>
+            <tr>
+                <td>12.00,15.00</td>
+                <td>0.51&plusmn;0.0774</td>
+                <td>0.47&plusmn;0.0524</td>
+                <td>0.92&plusmn;0.17</td>
+                <td>0.47&plusmn;0.0525</td>
+                <td>0.92&plusmn;0.17</td>
+            </tr>
+        </table>
+        <h3>
+            Plots per iteration step
+        </h3>
+        <h4>
+            Step-0
+        </h4>
+        <h5>
+            Fit to the generated MC
+        </h5>
+        <div class="row">
+            <div class="column">
+                <img src="../Cent-0to10/PtShapeIterations/iter-0/PtGen.png" alt="PtGen" style="width:90%">
+            </div>
+            <div class="column">
+                <img src="../Cent-0to10/RapShapeIterations/iter-0/RapGen.png" alt="RapGen" style="width:90%">
+            </div>
+        </div>
+        <h5>
+            Acceptance&#215;efficiency values:
+        </h5>
+        <div class="row">
+            <div class="column">
+                <img src="../Cent-0to10/AccEffi/iter-0/AccEffVsPt.png" alt="PtAccEffi" style="width:90%">
+            </div>
+            <div class="column">
+                <img src="../Cent-0to10/AccEffi/iter-0/AccEffVsRap.png" alt="RapAccEffi" style="width:90%">
+            </div>
+        </div>
+
+        <h4>
+            Step-1
+        </h4>
+        <h5>
+            Fit to the corrected yields:
+        </h5>
+        <div class="row">
+            <div class="column">
+                <img src="../Cent-0to10/PtShapeIterations/iter-1/PtYield.png" alt="PtYield" style="width:90%">
+            </div>
+            <div class="column">
+                <img src="../Cent-0to10/RapShapeIterations/iter-1/RapYield.png" alt="RapYield" style="width:90%">
+            </div>
+        </div>
+        <h5>
+            Pt and rapidity weights:
+        </h5>
+        <div class="row">
+            <div class="column">
+                <img src="../Cent-0to10/PtShapeIterations/iter-1/PtWeight.png" alt="PtWeight" style="width:90%">
+            </div>
+            <div class="column">
+                <img src="../Cent-0to10/RapShapeIterations/iter-1/RapWeight.png" alt="RapWeight" style="width:90%">
+            </div>
+        </div>
+        <h5>
+            Acceptance&#215;efficiency values:
+        </h5>
+        <div class="row">
+            <div class="column">
+                <img src="../Cent-0to10/AccEffi/iter-1/AccEffVsPt_ComparisonToIter-0.png" alt="PtAccEffi" style="width:90%">
+            </div>
+            <div class="column">
+                <img src="../Cent-0to10/AccEffi/iter-1/AccEffVsPt_ComparisonToIter-0.png" alt="RapAccEffi" style="width:90%">
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

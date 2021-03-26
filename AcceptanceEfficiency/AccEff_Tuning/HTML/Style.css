@@ -1,0 +1,142 @@
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(227, 227, 227);
+    overflow-x: hidden;
+    padding-top: 20px;
+    border-right: 1px solid rgb(205, 205, 205);
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: rgb(91, 98, 106);
+    display: block;
+}
+
+.sidenav a:hover {
+    color: teal;
+}
+
+.sidenav p {
+    padding: 0px 12px;
+    margin-top: 8px;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+    color: rgb(60, 60, 64);
+    display: block;
+}
+
+.main {
+    margin-left: 160px;
+    padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+.row {
+    display: flex;
+    text-align: center;
+}
+
+.column {
+    flex: 50%;
+    padding: 0px 5px;
+}
+
+.customTable {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.customTable td,
+.customTable th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.customTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.customTable tr:hover {
+    background-color: #ddd;
+}
+
+.customTable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: teal;
+    color: white;
+}
+
+h1 {
+    color: rgb(65, 65, 65);
+}
+
+h2 {
+    font-size: 28px;
+    line-height: 35px;
+    background-color: teal;
+    color: white;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+h3 {
+    font-weight: lighter;
+    font-size: 25px;
+    color: teal;
+}
+
+h4 {
+    font-size: 20px;
+    line-height: 20px;
+    background-color: teal;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+h5 {
+    color: teal;
+    margin-left: 1em;
+    font-weight: lighter;
+    font-size: large;
+    margin-bottom: 0;
+}
+
+li {
+    margin: 5px 0px;
+    font-size: large;
+}
+
+ul {
+    list-style: none;
+    /* Remove default bullets */
+}
+
+ul li::before {
+    content: "\2022";
+    color: teal;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
