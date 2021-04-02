@@ -24,8 +24,7 @@
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsAcceptanceEfficiency.C>
 
 //nombre de pt bins pour chaque classe en centralité de 0-10% à 70-90%
-int nRanges[5]={15, 15, 15, 14, 13}; // 1 + 2 bin for incoherent
-// int nRanges[5]={14,14,14, 13, 12}; // 2 bin for incoherent
+int nRanges[5]={15, 15, 15, 14, 13}; 
 
 Double_t nBranchinRatio = 0.05961;
 Double_t errBranchinRatio = 0.5; //globale (%)
@@ -53,17 +52,17 @@ std::vector<std::vector<Double_t>> dxRange{
 //number of MB events
 //de 0-10% à 70-90%
     Double_t nMB[5]={581154046, 1162308093, 1162308093, 1162308093, 1162308093};
-    Double_t errMB[5]={1523538, 3047077, 3047077, 3047077, 3047077}; //globale absolue
+    Double_t errMB[5]={1523538, 3047077, 3047077, 3047077, 3047077}; //absolute value
 
 //-------------------------------------------------------------------------------------------------
 //Taa
 //de 0-10% à 70-90%
-    Double_t nTaa[5]={23.26, 11.5835, 3.9165, 0.9756, 0.161165};
-    Double_t errTaa[5]={0.168, 0.1135, 0.065, 0.02335, 0.00365}; //globale absolue
+    Double_t nTaa[5]={23.26, 11.5835, 3.9165, 0.9756, 0.161165}; 
+    Double_t errTaa[5]={0.168, 0.1135, 0.065, 0.02335, 0.00365}; //absolute value
 
 //----------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------
-void ComputeRAAvsPt(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent, Bool_t isWithAllSystematicUncertainties)
+void ComputeRAAvsPt(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent)
 {
     Int_t iCent;
     if (minCent==0) iCent=0;
@@ -101,24 +100,10 @@ void ComputeRAAvsPt(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt
     
     // cout << "nJpsi = " << vectNJpsi[kJpsiMean] << " and nMB = " << nMB[iCent] << " and AccEff = " << vectAccEff[kAccEff] << " and Taa = " <<  nTaa[iCent] << " and ref pp = " << (vectCRpp[kCRpp]*drapidité*(maxPt-minPt)) << endl;
 
-    if(!isWithAllSystematicUncertainties)
-    {
-        errRaa_stat=vectNJpsi[kJpsiStatError]/vectNJpsi[kJpsiMean]*nRaa;
-    }
-    
-    else 
-    {
-        errRaa_stat=TMath::Sqrt(TMath::Power((vectNJpsi[kJpsiStatError]/vectNJpsi[kJpsiMean]), 2)  +  TMath::Power((vectAccEff[kAccEffStatError]/vectAccEff[kAccEffValue]), 2)  +  TMath::Power((vectCRpp[kCRppStatError]/vectCRpp[kCRppValue]), 2))*nRaa;
-    }
+    errRaa_stat=TMath::Sqrt(TMath::Power((vectNJpsi[kJpsiStatError]/vectNJpsi[kJpsiMean]), 2)  +  TMath::Power((vectAccEff[kAccEffStatError]/vectAccEff[kAccEffValue]), 2)  +  TMath::Power((vectCRpp[kCRppStatError]/vectCRpp[kCRppValue]), 2))*nRaa;
 
-    if(!isWithAllSystematicUncertainties)
-    {
-        errRaa_syst = vectNJpsi[kJpsiSysError]/vectNJpsi[kJpsiMean] * nRaa;
-    }
-    else 
-    {
-        errRaa_syst=TMath::Sqrt(TMath::Power((vectNJpsi[kJpsiSysError]/vectNJpsi[kJpsiMean]), 2) + TMath::Power(MC_inputVSpt_stat/100, 2) + TMath::Power(MCinput_correlations/100, 2) +  TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse/100), 2) + TMath::Power((EffMTR/100), 2)  + TMath::Power(0.01, 2) + TMath::Power((vectCRpp[kCRppSystError]/vectCRpp[kCRppValue]), 2)) * nRaa;
-    }
+    errRaa_syst=TMath::Sqrt(TMath::Power((vectNJpsi[kJpsiSysError]/vectNJpsi[kJpsiMean]), 2) + TMath::Power(MC_inputVSpt_stat/100, 2) + TMath::Power(MCinput_correlations/100, 2) +  TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse/100), 2) + TMath::Power((EffMTR/100), 2)  + TMath::Power(0.01, 2) + TMath::Power((vectCRpp[kCRppSystError]/vectCRpp[kCRppValue]), 2)) * nRaa;
+
     // printf("Uncorrelated error is %.3f %% \n", errRaa_syst/nRaa*100);
     // printf("Uncorrelated error on Njpsi is %.3f %% \n", vectNJpsi[kJpsiSysError]/vectNJpsi[kJpsiMean]*100);
     // printf("Uncorrelated error on MC input is %.3f %% \n", MC_inputVSpt[iCent]);
@@ -133,7 +118,7 @@ void ComputeRAAvsPt(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt
 }
 //----------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------
-void ExportResultsRAAvsPt(Double_t minY, Double_t maxY, Bool_t isWithAllSystematicUncertainties)
+void ExportResultsRAAvsPt(Double_t minY, Double_t maxY)
 {
     Int_t cent[6]={0, 10, 30, 50, 70, 90};
     for(int j=0; j<5; j++)
@@ -148,7 +133,7 @@ void ExportResultsRAAvsPt(Double_t minY, Double_t maxY, Bool_t isWithAllSystemat
 
         for(int i=0; i<nRanges[iCent]; i++)
         {
-            ComputeRAAvsPt(minY, maxY, xRange[iCent][i]-dxRange[iCent][i], xRange[iCent][i]+dxRange[iCent][i], cent[j], cent[j+1], isWithAllSystematicUncertainties);
+            ComputeRAAvsPt(minY, maxY, xRange[iCent][i]-dxRange[iCent][i], xRange[iCent][i]+dxRange[iCent][i], cent[j], cent[j+1]);
         }
     }     
 }

@@ -44,10 +44,10 @@
 
 std::vector<std::vector<Double_t>> vectPt0 = {
      //0 pour free, mass Jpsi, mass Jpsi/2, meanPt, 2*meanPt
-     {0, 3.097, 1.549, 2.09, 4.18},
-     {0, 3.097, 1.549, 2.20, 4.40},
-     {0, 3.097, 1.549, 2.35, 4.70}
-    //meanPt pour 50-70 : 2.44 et pour 70-90 : 2.34
+     {0, 3.097, 1.549, 2.10, 4.20},
+     {0, 3.097, 1.549, 2.19, 4.38},
+     {0, 3.097, 1.549, 2.34, 4.68}
+    //meanPt pour 50-70 : 2.43 et pour 70-90 : 2.34
 };
 
 //___________________________________________________________________________________________________________
@@ -163,15 +163,12 @@ void GetChi2OnRaaFit(eFunction fitFunction, Int_t minCent, Int_t maxCent, Double
         exp_value = graphRaa->GetBinContent(graphRaa->GetXaxis()->FindBin(val_pT[i]));
         exp_err = graphRaa->GetBinError(graphRaa->GetXaxis()->FindBin(val_pT[i]));
         fit_value = currentFunction->Eval(val_pT[i]);
-        // printf("exp_value=%.2f and fit_value=%.2f ---> %.5f\n", exp_value, fit_value, TMath::Power(exp_value-fit_value, 2)/TMath::Power(exp_err,2));
         printf("exp_value=%.2f and fit_value=%.2f ---> %.5f\n", exp_value, fit_value, TMath::Abs(exp_value-fit_value)/exp_err,2);
         chi2 += TMath::Power(exp_value-fit_value, 2)/TMath::Power(exp_err,2);
     }
     Int_t NDF;
-    if(fitFunction==kWoodSaxonFree) NDF=3;
-    else NDF=3;
+    NDF=3;
     printf("Test %s : Chi2=%.2f ---> Chi2/NDF = %.2f\n\n", sTest.Data() ,chi2, chi2/NDF);
-    // printf("Chi2=%.2f and NDF=%i given chi2/NDF=%.2f\n", chi2, NDF, chi2/NDF);
 }
 
 //___________________________________________________________________________________________________________
@@ -184,7 +181,7 @@ void MultipleTests(Int_t minCent, Int_t maxCent)
     std::vector<Double_t> tabPt0;
     std::vector<Double_t> minFit;
 
-    Int_t iCent; // indice permettant d'acceder à la bonne ligne du tableau
+    Int_t iCent; 
     if(minCent == 30 && maxCent == 50) iCent = 2;
     else if(minCent == 10 && maxCent == 30) iCent = 1; 
     else iCent = 0 ;

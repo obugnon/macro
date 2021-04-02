@@ -39,15 +39,12 @@
 #endif
 
 
-// Double_t minFit = 0.;
-// Double_t maxFit = 15.;
-
  std::vector<std::vector<Double_t>> vectPt0 = {
      //0 pour free, mass Jpsi, mass Jpsi/2, meanPt, 2*meanPt
-     {0, 3.097, 1.549, 2.09, 4.18},
-     {0, 3.097, 1.549, 2.20, 4.40},
-     {0, 3.097, 1.549, 2.35, 4.70}
-    //meanPt pour 50-70 : 2.44 et pour 70-90 : 2.34
+     {0, 3.097, 1.549, 2.10, 4.20},
+     {0, 3.097, 1.549, 2.19, 4.38},
+     {0, 3.097, 1.549, 2.34, 4.68}
+    //meanPt pour 50-70 : 2.43 et pour 70-90 : 2.34
  };
 
 //___________________________________________________________________________________________________________
@@ -70,7 +67,7 @@ TH1D* GetRAAGraph(Int_t minCent, Int_t maxCent, Bool_t isErrStatOnly, Bool_t isE
     xLowEdge.push_back({0., 0.3, 0.65, 1., 2., 3., 4., 5., 6., 7., 8., 10., 12., 15.});
     xLowEdge.push_back({0., 0.3, 0.65, 1., 2., 3., 4., 5., 6., 7., 8., 10., 12.});
 
-    Int_t iCent; // indice permettant d'acceder à la bonne ligne du tableau
+    Int_t iCent; 
     if(minCent == 70 && maxCent == 90) iCent = 2;
     else if(minCent == 50 && maxCent == 70) iCent = 1; 
     else iCent = 0 ; 
@@ -242,7 +239,7 @@ void MultipleFitRaa(Int_t minCent, Int_t maxCent, Bool_t isSaved)
     std::vector<Double_t> tabPt0;
     std::vector<Double_t> minFit;
 
-    Int_t iCent; // indice permettant d'acceder à la bonne ligne du tableau
+    Int_t iCent; 
     if(minCent == 30 && maxCent == 50) iCent = 2;
     else if(minCent == 10 && maxCent == 30) iCent = 1; 
     else iCent = 0 ;
@@ -301,7 +298,7 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
     std::vector<eFunction> fFit;
     std::vector<Double_t> tabPt0;
 
-    Int_t iCent; // indice permettant d'acceder à la bonne ligne du tableau
+    Int_t iCent; 
     if(minCent == 30 && maxCent == 50) iCent = 2;
     else if(minCent == 10 && maxCent == 30) iCent = 1; 
     else iCent = 0 ;
@@ -336,13 +333,13 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
         {
             sRange = SetRangeFunction(-4,-2.5, minCent, maxCent); 
             sTest = SetNameTest(kRaa, fFit[j], kFALSE, kFALSE, tMinFit[i], 15, tabPt0[j]);
-            if(j==2 || (j>3 && tMinFit[i]==1)) continue;
+            //if(j==2 || (j>3 && tMinFit[i]==1)) continue;
 
             inputList = (TDirectory*) inputFile->Get(Form("%s_%s", sRange.Data(), sTest.Data()));
             inputList->GetObject("parameters", vect);
             parameters = *vect;
             chi2=parameters[0][parameters[0].size()-1];
-            printf("chi2/NDF = %.3f\n", chi2);
+            // printf("chi2/NDF = %.3f\n", chi2);
 
             currentFunction = (TF1*)inputList->Get("function");
             currentFunction->SetLineColor(color[j]);
