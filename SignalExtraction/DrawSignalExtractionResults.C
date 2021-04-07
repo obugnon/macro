@@ -16,10 +16,16 @@
 #include "TString.h"
 #include "TMath.h"
 #include "TLatex.h"
+#include "TROOT.h"
+#include "TStyle.h"
+#include "TLegend.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsSignalExtraction.C>
+
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsFiles/ResultsSignalExtraction.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
+
+//Draw signal extraction for low pT J/psi production as function of centrality. 
 void ResultsLowPt()
 {
   Double_t minY = -4;
@@ -42,7 +48,7 @@ void ResultsLowPt()
   Int_t color[3]={46, 36, 9};
   Int_t marker[3]={22, 21, 20};
 
-  //Pour le remplissage de l'histogramme
+  //histo to be filled
   TGraphErrors* grCurrent_syst;
   TGraphErrors* grCurrent_stat;
 
@@ -104,6 +110,8 @@ Double_t ComputeDNDpT(Double_t nJpsi, Double_t dpT)
   return result;
 }
 
+
+//Draw signal extraction for hadronic J/psi production as function of pT. if isDraw_dResults, draw the dN/dpT distribution 
 //_______________________________________________________________________________________
 //_______________________________________________________________________________________
 void ResultsHadro(Bool_t isDraw_dResults)
@@ -152,7 +160,7 @@ void ResultsHadro(Bool_t isDraw_dResults)
   legend->AddEntry((TObject*)0, "Pb-Pb collisions #sqrt{s_{NN} }= 5.02 TeV", "");
 
   //values
-  Int_t iCent; // indice permettant d'acceder à la bonne ligne du tableau
+  Int_t iCent;
   Int_t nBins;
   Double_t minCent[5]={0, 10, 30, 50, 70}; 
   Double_t maxCent[5]={10, 30, 50, 70, 90}; 

@@ -13,6 +13,7 @@
 
 Bool_t reject;
 
+//enumerators used to select fit functions and tails parameters 
 enum Efunction
 {
 	kVWG = 100,	kVWGQuadratic = 200, kPol2Pol3 = 300, kDoubleExp = 400, kExp = 500,
@@ -63,7 +64,7 @@ Double_t VWGQuadratic(Double_t *x, Double_t *par) //Quadratic Variable width Gau
 }
 
 //___________________________________________________________________________________________________________
-Double_t Pol2Pol3(Double_t *x, Double_t *par)
+Double_t Pol2Pol3(Double_t *x, Double_t *par) //Ratio of polynomials 
 {
 	//par[0]=Normalization
 	//par[1]=a1
@@ -82,7 +83,7 @@ Double_t Pol2Pol3(Double_t *x, Double_t *par)
 }
 
 //___________________________________________________________________________________________________________
-Double_t DoubleExp(Double_t *x, Double_t *par)
+Double_t DoubleExp(Double_t *x, Double_t *par) //sum of exponentials
 {
 	//par[0]=Norm1
 	//par[1]=alpha1
@@ -98,7 +99,7 @@ Double_t DoubleExp(Double_t *x, Double_t *par)
 }
 
 //___________________________________________________________________________________________________________
-Double_t Exp(Double_t *x, Double_t *par)
+Double_t Exp(Double_t *x, Double_t *par) //exponential
 {
 	//par[0]=Norm
 	//par[1]=alpha
@@ -207,8 +208,8 @@ Double_t DoubleCrystalBallExtended(Double_t *x, Double_t *par)
 	Double_t t1 = signAlphaL*signAlphaR*(x[0]-par[1])/par[2];
 	//if (par[2] < 0) t1 = -t1;
 
-	Double_t jpsi;
-	Double_t psi2S;
+	Double_t jpsi=0.0;
+	Double_t psi2S=0.0;
   	if (t1 > -absAlphaL && t1 < absAlphaR) // gaussian core
   	{
    		jpsi = par[0]*(TMath::Exp(-0.5*t1*t1));
@@ -272,7 +273,7 @@ Double_t NA60(Double_t *x, Double_t*par)
 
 	Double_t t = (x[0]-par[1])/par[2];
 	if (par[2] < 0) t = -t;
-	Double_t t0;
+	Double_t t0=0.0;
 
 	if (t < par[3])
 	{
@@ -310,10 +311,10 @@ Double_t DoubleNA60(Double_t *x, Double_t*par)
 
 	Double_t t1 = (x[0]-par[1])/par[2];
 	if (par[2] < 0) t1 = -t1;
-	Double_t tjpsi;
-	Double_t tpsi2S;
-	Double_t jpsi;
-	Double_t psi2S;
+	Double_t tjpsi=0.0;
+	Double_t tpsi2S=0.0;
+	Double_t jpsi=0.0;
+	Double_t psi2S=0.0;
 
 	if (t1 < par[3])
 	{

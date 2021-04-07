@@ -79,15 +79,16 @@
 //Get tails parameter from a file that contains vectors
 std::vector<Double_t> GetTailsParameter(TString nameTails)
 {
-    TFile* analysis = TFile::Open("~/Documents/ALICE/AnalyseJPsi/macro/SignalExtraction/Tails_PbPb_5TeV_weighted.root");
+    TFile* analysis = TFile::Open("$LOWPT/macro/ResultFiles/Tails_PbPb_5TeV.root");
+    std::vector<Double_t> param_tails;
     if(!analysis)
     {
-        Error("InitializeFunctions","Cannot open Analysis File Tails_PbPb_5TeV_weighted.root");
-        return;
+        Error("InitializeFunctions","Cannot open Analysis File Tails_PbPb_5TeV.root");
+        return param_tails;
     }
     std::vector<Double_t> *vect;
     analysis->GetObject(Form("%s", nameTails.Data()), vect);
-    std::vector<Double_t> param_tails = *vect;
+    param_tails = *vect;
     
     return param_tails;
 
@@ -96,9 +97,9 @@ std::vector<Double_t> GetTailsParameter(TString nameTails)
 //___________________________________________________________________________________________________________
 TF1* BackGroundFunction(Efunction fName, Double_t xmin, Double_t xmax)
 {
-	Double_t* par;
-	TString* name_par;
-	TF1* BGFunction;
+	Double_t* par=nullptr;
+	TString* name_par=nullptr;
+	TF1* BGFunction=nullptr;
     Int_t nbPar = GetNPar(fName);
 	
 	switch (fName)
@@ -146,14 +147,14 @@ TF1* BackGroundFunction(Efunction fName, Double_t xmin, Double_t xmax)
 //___________________________________________________________________________________________________________
 TF1* SignalFunction(Efunction fSig, TString nTails, Epart fPart, Double_t xmin, Double_t xmax)
 {
-    Double_t* par_signal;
-    TString* name_par_signal;
+    Double_t* par_signal=nullptr;
+    TString* name_par_signal=nullptr;
     std::vector<Double_t> par_tails = GetTailsParameter(nTails);
     
 
     Int_t nb_par_signal = GetNPar(fSig);
 
-	TF1* fSignal;
+	TF1* fSignal=nullptr;
     
     switch (fSig)
     {
@@ -206,14 +207,14 @@ TF1* SignalFunction(Efunction fSig, TString nTails, Epart fPart, Double_t xmin, 
 //___________________________________________________________________________________________________________
 TF1* DistributionFunction(Efunction fBG, Efunction fSig, TString nTails, Double_t xmin, Double_t xmax)
 {
-	Double_t* par_bg;
-    Double_t* par_signal1;
-    Double_t* par_signal2;
+	Double_t* par_bg=nullptr;
+    Double_t* par_signal1=nullptr;
+    Double_t* par_signal2=nullptr;
     std::vector<Double_t> par_tails = GetTailsParameter(nTails);
 
-    TString* name_par_bg;
-    TString* name_par_signal1;
-    TString* name_par_signal2;
+    TString* name_par_bg=nullptr;
+    TString* name_par_signal1=nullptr;
+    TString* name_par_signal2=nullptr;
 
     Int_t nb_par_bg = GetNPar(fBG);
     Int_t nb_par_signal = GetNPar(fSig);
@@ -221,7 +222,7 @@ TF1* DistributionFunction(Efunction fBG, Efunction fSig, TString nTails, Double_
 
     Int_t fchoice = fBG + fSig;
 
-	TF1* fDistrib;
+	TF1* fDistrib=nullptr;
     
 	
 	switch (fBG)

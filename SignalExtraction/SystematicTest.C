@@ -22,8 +22,8 @@
 //const char* fileName = "AnalysisResults_15o_AOD229.root";
 //const char* fileName = "AnalysisResults_18q_AOD225.root";
 //const char* fileName = "AnalysisResults_18r_AOD225.root";
-// const char* fileName = "AnalysisResults_DataMerged.root";
-const char* fileName = "SubtractedHistos.root";
+const char* fileName = "AnalysisResults_DataMerged.root";
+// const char* fileName = "SubtractedHistos.root";
 const char* fileLocation ="~/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV";
 
 Double_t min_y = -4;

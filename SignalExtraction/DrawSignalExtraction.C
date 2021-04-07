@@ -35,7 +35,7 @@ Double_t min_mass = 0.;
 Double_t max_mass = 10.;
 Double_t min_fit = 2.2;
 Double_t max_fit = 4.5;
-Efunction f_BackGround = kDoubleExp;
+Efunction f_BackGround = kVWGQuadratic;
 Efunction f_Signal = kCBExtended;
 Etails p_tails = kEMB;
 

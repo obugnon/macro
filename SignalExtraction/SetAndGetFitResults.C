@@ -21,7 +21,7 @@ TString arrayFitVariableNames[numberOfFitVariables] = {"NPsi", "NPsi2s", "Mean",
 //Return the histogram which contains the values.
 TH3F *GetFitResultsHisto(Bool_t createIfNotFound = kFALSE){
   TH3F *histoFitResults;
-  TFile *outputFile = new TFile("FitResults.root");
+  TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitResultsSignalExtraction.root");
   histoFitResults =  ((TH3F*) outputFile->Get("histoFitResults"));
 
   if(!histoFitResults && createIfNotFound){
@@ -80,7 +80,7 @@ void SetFitResults(TString rangeName, TString testName, std::vector<double> fitR
   
   }
 
-  TFile *outputFile = new TFile("FitResults.root", "RECREATE");
+  TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitResultsSignalExtraction.root", "RECREATE");
   histoFitResults->Write();
   outputFile->Close();
 }

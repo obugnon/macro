@@ -118,7 +118,7 @@ void TailsExtraction_signal(const char* file=fileName, Double_t minY=min_y, Doub
     //Save tails
     if (isSaved == kTRUE)
     {
-        TFile *fout = TFile::Open("Tails_PbPb_5TeV_weighted.root", "UPDATE");
+        TFile *fout = TFile::Open("$LOWPT/macro/ResultFiles/Tails_PbPb_5TeV.root", "UPDATE");
         fout->WriteObject(&results, Form("%s", nameTails.Data()));
         fout->Close();
     }
@@ -167,7 +167,7 @@ void AddTailsSet(Efunction fSignal, Etails pTails, Efunction fBackground, Double
     results.push_back(20.105);
 
     TString nameTails = SetTailsName(pTails, fSignal, fBackground, minY, maxY, minPt, maxPt, minFit, maxFit);
-    TFile *fout = TFile::Open("Tails_PbPb_5TeV_weighted.root", "UPDATE");
+    TFile *fout = TFile::Open("$LOWPT/macro/ResultFiles/Tails_PbPb_5TeV_weighted.root", "UPDATE");
     fout->WriteObject(&results, Form("%s", nameTails.Data()));
     fout->Close();
 }
@@ -179,9 +179,9 @@ TH1* GetInvMass(const char* file, Etails pTails, Double_t minMass, Double_t maxM
     TFile* analysis = TFile::Open(Form("%s", file));
     if(!analysis) {
             Error("GetInvMass",Form("Cannot open Analysis File %s", file));
-            return results;
+            return 0;
         }
-    TH1* invMassDist;
+    TH1* invMassDist=nullptr;
     if(pTails == kPP)
     {
         THnSparse* hOppositeSign = static_cast<THnSparse*>(analysis->FindObjectAny("CMUL_hDimuon"));

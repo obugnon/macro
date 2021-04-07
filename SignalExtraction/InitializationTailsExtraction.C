@@ -12,6 +12,7 @@
 #include "TF1.h"
 #include "TString.h"
 #include "TMath.h"
+#include "TStyle.h"
 
 #include "FitFunctions.C"
 
@@ -59,13 +60,13 @@
 //___________________________________________________________________________________________________________
 TF1* SignalFunction(Efunction fSig, Etails fTails, Epart fPart, Double_t xmin, Double_t xmax, Bool_t isLeftFixed = kFALSE, Bool_t isRightFixed = kFALSE)
 {
-    Double_t* par_signal;
-    Double_t* par_tails;
-    TString* name_par_signal;
+    Double_t* par_signal=nullptr;
+    Double_t* par_tails=nullptr;
+    TString* name_par_signal=nullptr;
 
     Int_t nb_par_signal = GetNPar(fSig);
 
-	TF1* fSignal;
+	TF1* fSignal=nullptr;
     
     switch (fSig)
     {
