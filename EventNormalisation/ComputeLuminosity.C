@@ -16,10 +16,11 @@
 #include "TF1.h"
 #include "TString.h"
 #include "TMath.h"
+#include "TSystem.h"
 
 Double_t sigmaV0[5] = {4.708, 4.105,  4.073, 3.970, 3.933}; // 2015 puis 295585 - 295589, 295612 - 295615, 295665 - 296198, 296240 - 297624
 
-TString fileLocation = "/Users/obugnon/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV";
+TString fileLocation = "$LOWPT/AnalysisResults_5TeV";
 
 //__________________________________________________________________________________________________
 //__________________________________________________________________________________________________
@@ -54,7 +55,7 @@ void ComputeLuminosity()
 
     Double_t nCMUL, nV0MinCINT, nMULinCINT, nCMUL_tot;
     Double_t Lumi, Lumi_tot, FNorm, FNorm_tot;
-    int j;
+    int j=0;
 
     nCMUL_tot=0;
     FNorm_tot=0;

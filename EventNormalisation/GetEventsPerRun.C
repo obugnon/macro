@@ -15,6 +15,7 @@
 #include "TAxis.h"
 #include "TCanvas.h"
 #include "TString.h"
+#include "TSystem.h"
 
 //const char* PFile = "AnalysisResults_15o_AOD229.root";
 //const char* PFile = "AnalysisResults_18q_AOD225.root";
@@ -32,7 +33,7 @@
 std::vector<int> runListToVector(TString runList)
 {
   std::vector<int> vectorRuns;
-  TString strRunList = gSystem->GetFromPipe(Form("cat ~/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV/%s",runList.Data()));
+  TString strRunList = gSystem->GetFromPipe(Form("cat $LOWPT/AnalysisResults_5TeV/%s",runList.Data()));
   TObjArray *objRunList = strRunList.Tokenize("\n");
   TIter nextRun(objRunList);
   TObjString *strRun;
@@ -58,14 +59,14 @@ const bool Contains( std::vector<int>& Vec, const int& Element )
 void GetEventPerRun(const char* file, TString runList )
 {   
     //Opening Root file
-    TFile* analysis = TFile::Open(Form("~/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV/%s", file));
+    TFile* analysis = TFile::Open(Form("$LOWPT/AnalysisResults_5TeV/%s", file));
     if (!analysis) return;
     TList* eventHistos = (TList*)analysis->Get("EventHistos_CMUL7");
     TH1I* hPSeventsPerRun = (TH1I*)eventHistos->FindObject("fHistoPSEventsPerRun");
 
     //Creating output file
     FILE* fichier = NULL;
-    fichier = fopen("CMULtot.txt", "w");
+    fichier = fopen("CMULtoti.txt", "w");
 
     //Get the run list
     std::vector<int> vectorRun = runListToVector(runList);
