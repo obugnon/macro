@@ -21,10 +21,11 @@
 #include "TLatex.h"
 #include "TMatrixD.h"
 #include "TFitResult.h"
+#include "TFile.h"
 
 #include "FitFunctions.C"
 #include "AliPWGFunc.h"
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsAcceptanceEfficiency.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsAcceptanceEfficiency.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
@@ -57,7 +58,7 @@ TH1D* GetAccEffGraph(Double_t minCent, Double_t maxCent, Bool_t isErrStatOnly, B
     xLowEdge.push_back({0., 0.3, 0.65, 1., 2., 3., 4., 5., 6., 7., 8., 10., 12.});
 
 
-    Int_t iCent; // indice permettant d'acceder à la bonne ligne du tableau
+    Int_t iCent; 
     if(minCent == 70 && maxCent == 90) iCent = 2;
     else if(minCent == 50 && maxCent == 70) iCent = 1; 
     else iCent = 0 ; 
@@ -199,11 +200,11 @@ void FitAcceptanceEfficiency(eFunction fitFunction, Int_t minCent, Int_t maxCent
 
     TMatrixDSym covarianceMatrix = fitStatus->GetCovarianceMatrix();
 
-    if (isSaved)// Attention rajouté rapidement 
+    if (isSaved)// 
     {
         //Save Histogram
         cAccEff->SaveAs(".pdf");
-        TFile *outputFile = new TFile("FitFunctionsAcceptanceEfficiency.root", "UPDATE");// Attention rajouté rapidement 
+        TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsAcceptanceEfficiency.root", "UPDATE");
         TDirectory *outputList = (TDirectory*) outputFile->Get(Form("%s_%s", sRangeFunction.Data(), sTest.Data()));
         if(!outputList) 
         {
