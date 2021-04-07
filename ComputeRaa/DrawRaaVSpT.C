@@ -17,8 +17,11 @@
 #include "TMath.h"
 #include "TLatex.h"
 #include "TF1.h"
+#include "TLegend.h"
+#include "TROOT.h"
+#include "TStyle.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsRaa.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsRaa.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
@@ -41,7 +44,7 @@ void DrawRaaVSpt(Int_t minCent, Int_t maxCent)
   dxRange_syst.push_back({0.05, 0.058, 0.058, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.33, 0.33});
 
 
-  Int_t iCent; // indice permettant d'acceder à la bonne ligne du tableau
+  Int_t iCent; 
   if (minCent == 70 && maxCent == 90) iCent = 2;
   else if (minCent == 50 && maxCent == 70) iCent = 1; 
   else iCent = 0 ; 

@@ -17,9 +17,11 @@
 #include "TMath.h"
 #include "TLatex.h"
 #include "TF1.h"
+#include "TLegend.h"
+#include "TROOT.h"
+#include "TStyle.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsRaa.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/figTemplate.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsRaa.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
@@ -106,131 +108,4 @@ void ResultsHadro()
     mean->SetLineColor(1);
     mean->Draw("SAME");    
     dlegend->Draw();
-}
-
-//For Preliminary Figure
-void ResultsHadro_ForPreliminary()
-{
-  // Load necessary libraries
-  LoadLibs();
-  // Set the default style
-  SetStyle();
-
-  // Prepare Figure, please stick to the default canvas size(s) unless absolutely necessary in your case
-  // Rectangular
-  TCanvas *cfig = new TCanvas("cfig", "Alice Figure Template", 800, 600); 
-  // Square
-  //TCanvas *cfig = new TCanvas("cfig", "Alice Figure Template", 800, 800); 
-  cfig->SetLogy();
-  // Set Titles etc..
-  TH1 * h = cfig->DrawFrame(0,0.4,150,12);
-
-  // === Commonly used x/ titles: ===
-    // pt invariant yields
-    const char *  texPtX="#it{p}_{T} (GeV/#it{c})";
-    const char *  texPtY="1/#it{N}_{ev} 1/(2#pi#it{p}_{T}) d#it{N}/(d#it{p}_{T}d#it{y}) ((GeV/#it{c})^{-2})";
-    // mt invariant yields
-    const char *  texMtX="#it{m}_{T} (GeV/#it{c}^{2})";
-    const char *  texMtY="1/#it{N}_{ev} 1/(2#pi#it{m}_{T}) d#it{N}/(d#it{m}_{T}d#it{y}) ((GeV/#it{c}^{2})^{-2}) "; 
-    // Invariant mass with decay products K and pi
-    const char *  texMassX="#it{M}_{K#pi} (GeV/#it{c}^{2})";
-    const char *  texMassY="d#it{N}/(d#it{M}_{K#pi})";
-    // <pt>, npart
-    const char * texMeanPt    = "#LT#it{p}_{T}#GT (GeV/#it{c})";
-    const char * texMeanNpart = "#LT#it{N}_{part}#GT";
-    // Raa
-    const char *  texRaa="#it{R}_{AA}";
-
-    // Set titles
-    h->SetXTitle(texMeanNpart);
-    // Please be consistent on the y label
-    h->SetYTitle(texRaa);
-
-    // Draw the logo   
-    //  0: Just "ALICE" (for final data), to be added only if ALICE does not appear otherwise (e.g. in the legend)
-    //  >0: ALICE Preliminary
-    DrawLogo(1, 0.59, 0.81);
-
-    // You should always specify the colliding system
-    // NOTATION: pp, p-Pb, Pb-Pb. 
-    // Don't forget to use #sqrt{s_{NN}} for p-Pb and Pb-Pb
-    // You can change the position of this with
-    // TLatex * text = new TLatex (202,6.16,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
-    // text->Draw("SAME");
-    // text->SetTextSizePixels(20);
-
-    // TLatex * text2 = new TLatex (202.6,4.79,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
-    // text2->SetTextSizePixels(20);
-    // text2->Draw("SAME");
-    TLatex * text = new TLatex (102,6.16,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
-    text->Draw("SAME");
-    text->SetTextSizePixels(20);
-
-    TLatex * text2 = new TLatex (102.6,4.79,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
-    text2->SetTextSizePixels(20);
-    text2->Draw("SAME");
-  
-    //Legend, if needed
-    TLegend * leg = new TLegend( 0.56,  0.48,  0.86, 0.66);
-
-    TF1 *mean = new TF1("mean","[0]",0,450);
-    mean->SetParameter(0, 1);
-    mean->SetLineColor(1);
-    mean->Draw("SAME");  
-    
-
-    for(int i=0; i<3; i++)
-    {
-      Int_t iGlobalError; 
-      if (i==0) iGlobalError = 2;
-      else if (i==1) iGlobalError = 1; 
-      else if (i==2) iGlobalError = 0; 
-    
-      TGraphErrors* gr_syst = new TGraphErrors(5);
-      
-      TGraphErrors* gr_stat = new TGraphErrors(5);
-
-      TGraphErrors *gr_global = new TGraphErrors(1);
-      
-      for (int j=0; j<3; j++)
-      {
-        if(minPt[i]==0 && j > 2) continue;
-        gr_syst->SetPoint(j, nPart[j], RaaResultsVSCent[SetRangeValue(kRaa, -4, -2.5, minPt[i], maxPt[i], minCent[j], maxCent[j])][kRaaValue]);
-        cout << RaaResultsVSCent[SetRangeValue(kRaa, -4, -2.5, minPt[i], maxPt[i], minCent[j], maxCent[j])][kRaaValue] << endl;
-        gr_syst->SetPointError(j,2, RaaResultsVSCent[SetRangeValue(kRaa, -4, -2.5, minPt[i], maxPt[i], minCent[j], maxCent[j])][kRaaSyst]);
-
-        gr_stat->SetPoint(j, nPart[j], RaaResultsVSCent[SetRangeValue(kRaa, -4, -2.5, minPt[i], maxPt[i], minCent[j], maxCent[j])][kRaaValue]);
-        gr_stat->SetPointError(j,0, RaaResultsVSCent[SetRangeValue(kRaa, -4, -2.5, minPt[i], maxPt[i], minCent[j], maxCent[j])][kRaaStat]); 
-      }
-
-      gr_syst->SetLineColor(colors[i]);
-      gr_syst->SetFillStyle(0);
-      gr_syst->Draw("5same");
-
-      gr_stat->SetMarkerColor(colors[i]);
-      gr_stat->SetMarkerSize(0.8);
-      gr_stat->SetMarkerStyle(markers[i]);
-      gr_stat->SetLineColor(colors[i]);
-      gr_stat->SetFillColor(colors[i]);
-      gr_stat->SetFillStyle(0);
-      gr_stat->Draw("psame");
-
-      gr_global->SetPoint(0,147-i*6,1);
-      gr_global->SetPointError(0,3,errSystUncorrVScent_Raa[iGlobalError]/100);
-      gr_global->SetLineColorAlpha(fillColors[i],0);
-      gr_global->SetFillColorAlpha(fillColors[i], 0.75);
-      gr_global->SetFillStyle(1001);
-      gr_global->Draw("2same");
-  
-      if(minPt[i]==0.3) leg->AddEntry(gr_stat,Form("%.1f < #it{p}_{T} < %.f GeV/#it{c}",minPt[i], maxPt[i]) ,"lp");
-      else if(maxPt[i]==0.3) leg->AddEntry(gr_stat,Form("%.f < #it{p}_{T} < %.1f GeV/#it{c}",minPt[i], maxPt[i]) ,"lp");
-      else leg->AddEntry(gr_stat,Form("%.f < #it{p}_{T} < %.f GeV/#it{c}",minPt[i], maxPt[i]) ,"lp");
-
-    }
-    leg->SetFillColor(0);
-    leg->SetTextSize(gStyle->GetTextSize()*0.6);
-    leg->Draw();
-
-
-      
 }

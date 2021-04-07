@@ -19,9 +19,9 @@
 #include "TLatex.h"
 
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsPPCrossSection.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsSignalExtraction.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsAcceptanceEfficiency.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsPPCrossSection.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsSignalExtraction.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsAcceptanceEfficiency.C>
 
 //nombre de pt bins pour chaque classe en centralité de 0-10% à 70-90%
 int nRanges[5]={15, 15, 15, 14, 13}; 
@@ -64,12 +64,12 @@ std::vector<std::vector<Double_t>> dxRange{
 //----------------------------------------------------------------------------------------------------------------
 void ComputeRAAvsPt(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent)
 {
-    Int_t iCent;
+    Int_t iCent=0;
     if (minCent==0) iCent=0;
     else if (minCent==10) iCent=1;
     else if (minCent==30) iCent=2;
     else if (minCent==50) iCent=3;
-    else if (minCent==70) iCent=4;
+    else iCent=4;
     
 
     Double_t nRaa;
@@ -124,12 +124,12 @@ void ExportResultsRAAvsPt(Double_t minY, Double_t maxY)
     for(int j=0; j<5; j++)
     {
         printf("\n//%i-%i%%\n", cent[j], cent[j+1]);
-        Int_t iCent;
+        Int_t iCent=0;
         if (cent[j]==0) iCent=0;
         else if (cent[j]==10) iCent=1;
         else if (cent[j]==30) iCent=2;
         else if (cent[j]==50) iCent=3;
-        else if (cent[j]==70) iCent=4;
+        else iCent=4;
 
         for(int i=0; i<nRanges[iCent]; i++)
         {
@@ -142,12 +142,12 @@ void ExportResultsRAAvsPt(Double_t minY, Double_t maxY)
 //----------------------------------------------------------------------------------------------------------------
 void ComputeRAAvsCent(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent)
 {
-    Int_t iCent;
+    Int_t iCent=0;
     if (minCent==0) iCent=0;
     else if (minCent==10) iCent=1;
     else if (minCent==30) iCent=2;
     else if (minCent==50) iCent=3;
-    else if (minCent==70) iCent=4;
+    else iCent=4;
 
 
     Double_t nRaa;
@@ -200,7 +200,7 @@ void ExportResultsRAAvsCent(Double_t minY, Double_t maxY)
 {
     Double_t ptRange[4]={0, 0.3, 1, 2};
     Int_t cent[6]={0, 10, 30, 50, 70, 90};
-    Int_t iCent;
+    Int_t iCent=0;
 
     for(int i=0; i<3; i++)
     {
@@ -211,7 +211,7 @@ void ExportResultsRAAvsCent(Double_t minY, Double_t maxY)
             else if (cent[j]==10) iCent=1;
             else if (cent[j]==30) iCent=2;
             else if (cent[j]==50) iCent=3;
-            else if (cent[j]==70) iCent=4;
+            else iCent=4;
             ComputeRAAvsCent(minY, maxY, ptRange[i], ptRange[i+1], cent[j], cent[j+1]);
         }
     }     
