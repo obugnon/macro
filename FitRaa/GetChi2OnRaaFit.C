@@ -27,9 +27,9 @@
 #include "FitFunctions.C"
 #include "AliPWGFunc.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsRaa.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsPPCrossSection.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsAcceptanceEfficiency.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsRaa.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsPPCrossSection.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsAcceptanceEfficiency.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
@@ -140,7 +140,7 @@ void GetChi2OnRaaFit(eFunction fitFunction, Int_t minCent, Int_t maxCent, Double
     TH1D* graphRaa = GetRAAGraph(minCent, maxCent, isErrStatOnly, isErrSystOnly);
     
     //TF1 file
-    TFile *inputFile = new TFile("FitFunctionsRaa.root");
+    TFile *inputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsRaa.root");
     TDirectory *inputList;
     TF1* currentFunction;
 

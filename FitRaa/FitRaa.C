@@ -27,9 +27,9 @@
 #include "FitFunctions.C"
 #include "AliPWGFunc.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsRaa.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsPPCrossSection.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsAcceptanceEfficiency.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsRaa.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsPPCrossSection.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsAcceptanceEfficiency.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
@@ -143,9 +143,9 @@ void FitRaa(eFunction fitFunction, Int_t minCent, Int_t maxCent, Double_t minFit
 
 
     //Fit
-    TF1* fFit; 
+    TF1* fFit=nullptr; 
     TFitResultPtr fitStatus;
-    Int_t nPar;
+    Int_t nPar=0;
 
     if (fitFunction == kWoodSaxonFree)
     {
@@ -215,7 +215,7 @@ void FitRaa(eFunction fitFunction, Int_t minCent, Int_t maxCent, Double_t minFit
     {
         //Save Histogram
         cRaa->SaveAs(".pdf");
-        TFile *outputFile = new TFile("FitFunctionsRaa.root", "UPDATE");
+        TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsRaa.root", "UPDATE");
         TDirectory *outputList = (TDirectory*) outputFile->Get(Form("%s_%s", sRange.Data(), sTest.Data()));
         if(!outputList) 
         {
@@ -284,7 +284,7 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
     gStyle->SetOptStat(0000);
 
     //TF1 file
-    TFile *inputFile = new TFile("FitFunctionsRaa.root");
+    TFile *inputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsRaa.root");
     TDirectory *inputList ;
     std::vector<std::vector<Double_t>> *vect;
     std::vector<std::vector<Double_t>> parameters;
