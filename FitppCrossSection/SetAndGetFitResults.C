@@ -22,7 +22,7 @@ TString arrayFitVariableNames[numberOfFitVariables] = {"NCrossSection", "chi2"};
 TH3F *GetFitCrossSectionHisto(Bool_t createIfNotFound = kFALSE){
   TH3F *histoFitCrossSection;
   
-  TFile *outputFile = new TFile("FitCrossSection.root");
+  TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitResultsCrossSection.root");
   histoFitCrossSection =  ((TH3F*) outputFile->Get("histoFitCrossSection"));
 
   if(!histoFitCrossSection && createIfNotFound){
@@ -81,7 +81,7 @@ void SetFitResults(TString rangeName, TString testName, std::vector<double> fitR
   
   }
 
-  TFile *outputFile = new TFile("FitCrossSection.root", "RECREATE");
+  TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitResultsCrossSection.root", "RECREATE");
   histoFitResults->Write();
   outputFile->Close();
 }

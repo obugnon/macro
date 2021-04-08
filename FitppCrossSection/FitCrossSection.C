@@ -24,12 +24,12 @@
 
 #include "FitFunctions.C"
 #include "AliPWGFunc.h"
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsPPCrossSection.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsPPCrossSection.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
 #ifndef JPSI_MASS
-#define JPSI_MASS   3.096916
+#define JPSI_MASS  3.096916
 #define PSI2S_MASS 3.686109
 #endif
 
@@ -84,9 +84,9 @@ std::vector<Double_t> FitCrossSection(eFunction fitFunction, Bool_t isErrStatOnl
     graphPP->SetTitle(Form("%s", sTest.Data()));
 
     //Fit
-    TF1* fFit; 
+    TF1* fFit=nullptr; 
     TFitResultPtr fitStatus;
-    Int_t nPar;
+    Int_t nPar=0;
     if (fitFunction == kPowLawFree)
     {
         nPar = 4;
@@ -162,7 +162,7 @@ std::vector<Double_t> FitCrossSection(eFunction fitFunction, Bool_t isErrStatOnl
     if(isSaved)
     {
         cPPcrosssection->SaveAs(".pdf");
-        TFile *outputFile = new TFile("FitFunctionsCRpp.root", "UPDATE");// Attention rajouté rapidement 
+        TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsCRpp.root", "UPDATE");
         TDirectory *outputList = (TDirectory*) outputFile->Get(Form("%s", sTest.Data()));
         if(!outputList) 
         {

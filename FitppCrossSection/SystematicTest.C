@@ -178,7 +178,7 @@ void GetIntegratedCrossSection(Double_t minPt, Double_t maxPt, Bool_t isWeighted
 
     int numberOfTests = numberFitFunction*numberErrorTest;;
 
-    int counter =1; 
+    int counter = 1; 
      
     std::vector<Double_t> result_cross_section;
     std::vector<Double_t> error_stat;
@@ -275,7 +275,6 @@ void GetIntegratedCrossSection(Double_t minPt, Double_t maxPt, Bool_t isWeighted
     n_cr = n_cr/sum_weight;
     stat_cr = stat_cr/sum_weight;
     syst_cr = syst_cr/sum_weight;
-    // standardDeviation_cr = TMath::Sqrt(a/sum_weight-TMath::Power(n_cr,2));
     a = a/sum_weight;
     standardDeviation_cr = TMath::Sqrt(sum_weight/(sum_weight - 1)*(a-TMath::Power(n_cr,2)));
     
