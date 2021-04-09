@@ -22,7 +22,7 @@ TString arrayFitVariableNames[numberOfFitVariables] = {"NYield", "meanPt", "mean
 TH3F *GetFitYieldHisto(Bool_t createIfNotFound = kFALSE){
   TH3F *histoFitYield;
   
-  TFile *outputFile = new TFile("FitResultsYield.root");
+  TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitResultsYield.root");
   histoFitYield =  ((TH3F*) outputFile->Get("FitYield"));
 
   if(!histoFitYield && createIfNotFound){
@@ -81,7 +81,7 @@ void SetFitResults(TString rangeName, TString testName, std::vector<double> fitR
   
   }
 
-  TFile *outputFile = new TFile("FitResultsYield.root", "RECREATE");
+  TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitResultsYield.root", "RECREATE");
   histoFitResults->Write();
   outputFile->Close();
 }

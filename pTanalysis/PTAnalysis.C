@@ -22,8 +22,9 @@
 #include "TString.h"
 #include "TMath.h"
 #include "TLatex.h"
+#include "TStyle.h"
 
-const char* fileLocation ="~/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV";
+const char* fileLocation ="$LOWPT/AnalysisResults_5TeV";
 const char* fileNameData = "AnalysisResults_DataMerged.root";
 const char* fileNameData2015 = "Individual_data_prod/AnalysisResults_15o_AOD229.root";
 const char* fileNameSim = "AnalysisResults_cohJpsi_weighted.root";
@@ -111,11 +112,11 @@ void GetSTARLIGHTDimuon(Double_t minMass=2.8, Double_t maxMass=3.4, Double_t min
         //gStyle->SetHistLineColor(4);
         cNmumuVSpT->SetLogy();
 
-        TFile* analysisCoh = TFile::Open("~/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV/AnalysisResults_cohJpsiSTARLIGHT.root");
+        TFile* analysisCoh = TFile::Open(Form("%s/AnalysisResults_cohJpsiSTARLIGHT.root", fileLocation));
         TList* cohHistos = (TList*)analysisCoh->Get("ReconstructedHistos_CAny");
         THnSparse* hOScoh = (THnSparse*)cohHistos->FindObject("fHistoDiMuonOS");
 
-        TFile* analysisIncoh = TFile::Open("~/Documents/ALICE/AnalyseJPsi/AnalysisResults_5TeV/AnalysisResults_incohJpsiSTARLIGHT.root");
+        TFile* analysisIncoh = TFile::Open(Form("%s/AnalysisResults_incohJpsiSTARLIGHT.root", fileLocation));
         TList* incohHistos = (TList*)analysisIncoh->Get("ReconstructedHistos_CAny");
         THnSparse* hOSincoh = (THnSparse*)incohHistos->FindObject("fHistoDiMuonOS");
 

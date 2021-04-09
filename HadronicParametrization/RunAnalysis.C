@@ -15,8 +15,8 @@
 #include "TMath.h"
 #include "TF1.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/HadronicParametrization/Common.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsSignalExtraction.C>
+#include "Common.C"
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsSignalExtraction.C>
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
@@ -29,10 +29,7 @@ std::vector<Double_t> RunSingleAnalysis(eFunction fRaa=kPol1, eFunction fCRpp=kP
     TString sTestCRpp=SetNameTest(kCRpp, fCRpp, kFALSE, kFALSE);
     TString sTestAccEff=SetNameTest(kAccEff, fAccEff, kTRUE, kFALSE, 0, 10);
 
-    // printf("\\item test \\Raa\\ with %s, test pp reference cross section with %s and test \\AccEff\\ with %s.\n", sTestRaa.Data(), sTestCRpp.Data(), sTestAccEff.Data());
-    // printf("\\range %s test \\Raa\\ with %s, test pp reference cross section with %s and test \\AccEff\\ with %s.\n", sRange.Data(), sTestRaa.Data(), sTestCRpp.Data(), sTestAccEff.Data());
-    // printf("\\Test \\Raa\\ with %s\n", sTestRaa.Data());
-
+    printf("\\item test \\Raa\\ with %s, test pp reference cross section with %s and test \\AccEff\\ with %s.\n", sTestRaa.Data(), sTestCRpp.Data(), sTestAccEff.Data());
 
     Int_t nPar=GetNPar(sRange, sTestRaa, sTestCRpp, sTestAccEff);
     // std::cout << "Number of parameters is " << nPar << std::endl;

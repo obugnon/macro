@@ -13,9 +13,9 @@
 #include "TMath.h"
 #include "TLatex.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsYield.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsAcceptanceEfficiency.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsSignalExtraction.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsYield.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsAcceptanceEfficiency.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsSignalExtraction.C>
 
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
@@ -36,7 +36,7 @@ Double_t errMB[5]={1523538, 3047077, 3047077, 3047077, 3047077}; //globale absol
 
 void ExtractNJpsi(Int_t minCent, Int_t maxCent, Double_t minPt, Double_t maxPt, Double_t minY=-4, Double_t maxY=-2.5)
 {
-    int centClass;
+    int centClass=0;
     if(minCent==0) centClass=0;
     else if(minCent==10) centClass=1;
     else if(minCent==30) centClass=2;

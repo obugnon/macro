@@ -15,9 +15,9 @@
 #include "TString.h"
 #include "TMath.h"
 #include "TLatex.h"
+#include "TLegend.h"
 
 #include "FitYield.C"
-// #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
 //___________________________________________________________________________________________________________
@@ -37,7 +37,7 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
     gStyle->SetOptStat(0000);
 
     //TF1 file
-    TFile *outputFile = new TFile("FitFunctionsYield.root", "UPDATE");
+    TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsYield.root", "UPDATE");
     TDirectory *outputList ;
     std::vector<std::vector<Double_t>> *vect;
     std::vector<std::vector<Double_t>> parameters;
@@ -51,7 +51,7 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
     eFunction fFit=kPowLawFree;
     std::vector<Double_t> tMinFit;
 
-    Int_t iCent; 
+    Int_t iCent=0; 
     if(minCent == 30 && maxCent == 50) iCent = 2;
     else if(minCent == 10 && maxCent == 30) iCent = 1; 
     else iCent = 0 ;
@@ -65,9 +65,6 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
         nTests = 3;
         tMinFit={0.3, 0.65, 1};
     }
-
-
-
     
     Int_t lineColor[5]={kRed+1, kAzure-1, kGreen+2, kOrange-3};
     Int_t lineStyle[5]={1, 10, 9, 7};

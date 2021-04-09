@@ -18,9 +18,9 @@
 #include "TMath.h"
 #include "TLatex.h"
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsPPCrossSection.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsSignalExtraction.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsAcceptanceEfficiency.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsPPCrossSection.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsSignalExtraction.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsAcceptanceEfficiency.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
@@ -58,7 +58,7 @@ std::vector<std::vector<Double_t>> dxRange{
 //-------------------------------------------------------------------------------------------------
 void ComputeYield(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, Int_t minCent, Int_t maxCent)
 {
-    Int_t iCent;
+    Int_t iCent=0;
     if (minCent==0) iCent=0;
     else if (minCent==10) iCent=1;
     else if (minCent==30) iCent=2;
@@ -93,7 +93,7 @@ void ComputeYield(Double_t minY, Double_t maxY, Double_t minPt, Double_t maxPt, 
 
 void ExportResultsYield(Double_t minY, Double_t maxY, Int_t minCent, Int_t maxCent)
 {
-    Int_t iCent;
+    Int_t iCent=0;
     if (minCent==0) iCent=0;
     else if (minCent==10) iCent=1;
     else if (minCent==30) iCent=2;

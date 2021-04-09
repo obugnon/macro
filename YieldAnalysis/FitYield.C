@@ -28,15 +28,12 @@
 #include "FitFunctions.C"
 
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsYield.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsYield.C>
 
 #ifndef JPSI_MASS
 #define JPSI_MASS  3.096916
 #define PSI2S_MASS 3.686109
 #endif
-
-
-
 
 TH1D* GetYieldGraph(Int_t minCent, Int_t maxCent, Bool_t isErrStatOnly, Bool_t isErrSystOnly)
 {
@@ -109,9 +106,9 @@ std::vector<Double_t> FitYield(eFunction fitFunction, Int_t minCent, Int_t maxCe
 
 
     //Fit
-    TF1* fFit; 
+    TF1* fFit=nullptr; 
     TFitResultPtr fitStatus;
-    Int_t nPar;
+    Int_t nPar=0;
 
     if (fitFunction == kPowLawFree)
     {
@@ -186,7 +183,7 @@ std::vector<Double_t> FitYield(eFunction fitFunction, Int_t minCent, Int_t maxCe
 
     if (isSaved)
     {
-        TFile *outputFile = new TFile("FitFunctionsYield.root", "UPDATE");
+        TFile *outputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsYield.root", "UPDATE");
         TDirectory *outputList = (TDirectory*) outputFile->Get(Form("%s_%s", sRange.Data(), sTest.Data()));
         if(!outputList) 
         {

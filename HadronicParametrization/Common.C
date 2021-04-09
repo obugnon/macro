@@ -17,9 +17,9 @@
 #include "TMath.h"
 #include "TCanvas.h"
 #include "TF1.h"
+#include "FitFunctions.C"
 
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/HadronicParametrization/FitFunctions.C>
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
@@ -29,15 +29,15 @@ TDirectory* GetInputFunctionsDirectory(eVariable kVar, TString sRange, TString s
     switch (kVar)
     {
     case kCRpp:
-        sFile = "/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/FitppCrossSection/FitFunctionsCRpp.root";
+        sFile = "$LOWPT/macro/ResultFiles/FitFunctionsCRpp.root";
     break;
     
     case kAccEff:
-        sFile = "/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/FitAcceptanceEfficiency/FitFunctionsAcceptanceEfficiency.root";
+        sFile = "$LOWPT/macro/ResultFiles/FitFunctionsAcceptanceEfficiency.root";
     break;
 
     case kRaa:
-        sFile = "/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/FitRaa/FitFunctionsRaa.root";
+        sFile = "$LOWPT/macro/ResultFiles/FitFunctionsRaa.root";
     break;
     }
     
@@ -173,7 +173,7 @@ TMatrixDSym GetExtendedCovarianceMatrix(eVariable kVar, TString sRange, TString 
 //___________________________________________________________________________________________________________
 TF1* GetFullFunction(TString sRange, TString sTestRaa, TString sTestCRpp, TString sTestAccEff)
 {
-    TF1* fRatioIntegral;
+    TF1* fRatioIntegral=nullptr;
 
     Int_t nParFull = GetNPar(sRange, sTestRaa, sTestCRpp, sTestAccEff);
     Double_t parameters[nParFull];
