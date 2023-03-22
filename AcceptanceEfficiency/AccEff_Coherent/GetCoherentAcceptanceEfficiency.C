@@ -15,12 +15,16 @@
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
-void GetAccEffResults(Bool_t isDraw, Bool_t isExportToLatex)
+void GetAccEffResults(Bool_t isDraw, Bool_t isExportToLatex, Bool_t withSystOnPtCut)
 {
     TFile* results;
-    results = TFile::Open("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Coherent/AccEffi/AccEffiValues.root");
-    if(!results) {
-        Error("GetAccEffResults","No file found for acceptance efficiency results.")
+    results = TFile::Open("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Coherent/AccEffi_withPtCuts_rec/AccEffiValues.root");
+    // results = TFile::Open("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Coherent/AccEffi_withPtCuts_all/AccEffiValues.root");
+    TFile* results2;
+    results2 = TFile::Open("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Coherent/AccEffi_withoutPtCuts_all/AccEffiValues.root");
+
+    if(!results || !results2) {
+        Error("GetAccEffResults","No file found for acceptance efficiency results.");
         return;
     }    
 
@@ -36,20 +40,40 @@ void GetAccEffResults(Bool_t isDraw, Bool_t isExportToLatex)
     TH1F* graphGen = (TH1F*)results->Get("histoGenCent;1");
     TH1F* graphRec = (TH1F*)results->Get("histoRecCent;1");
 
+
+    TH1F* graphAccEff2 = (TH1F*)results2->Get("histoAccEffiCent;1");
+    TH1F* graphGen2 = (TH1F*)results2->Get("histoGenCent;1");
+    TH1F* graphRec2 = (TH1F*)results2->Get("histoRecCent;1");
+
     Int_t nBins=graphAccEff->GetNbinsX();
 
     const Double_t tLowEdge[6]={0, 10, 30, 50, 70, 90};
     TH1D* graph = new TH1D("Coherent J/psi Acceptance Efficiency", "", nBins, tLowEdge);
+    
+    TH1D* graph2 = new TH1D("Coherent J/psi Acceptance Efficiency for syst", "", nBins, tLowEdge);
+
+    TLatex * textPt = new TLatex (50,0.118,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");        
+    textPt->SetTextSizePixels(24);
+    TLatex * text1Pt = new TLatex (50,0.1175,"J/#psi_{coh} #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
+    text1Pt->SetTextSizePixels(22);
+    TLatex * text2Pt = new TLatex (50,0.117,"0 < #it{p}_{T} < 0.3 GeV/#it{c}");
+    text2Pt->SetTextSizePixels(22);
+
+
     if(isDraw)
     {
         TCanvas *cAccEff = new TCanvas("","J/#psi Acceptance Efficiency");
-        
-        graph->GetXaxis()->SetTitle("centrality (%)");
-        graph->GetYaxis()->SetTitle("A#times#epsilon");
+        graph->GetXaxis()->SetTitle("Centralite (%)");
+        graph->GetYaxis()->SetTitle("A#times#epsilon_{J/#psi}");
         graph->SetMarkerColor(kBlue);
         graph->SetLineColor(kBlue);
         graph->SetFillColor(kBlue);
         graph->SetFillStyle(0);
+
+        // graph2->SetMarkerColor(kGrey);
+        // graph2->SetLineColor(kGrey);
+        // graph2->SetFillColor(kGrey);
+        // graph2->SetFillStyle(0);
     }
 
 
@@ -92,6 +116,9 @@ void GetAccEffResults(Bool_t isDraw, Bool_t isExportToLatex)
     {
         graph->Draw();
         gStyle->SetOptStat(0);
+        textPt->Draw("SAME");
+        text1Pt->Draw("SAME");
+        text2Pt->Draw("SAME");
     }
     else results->Close();
 }
