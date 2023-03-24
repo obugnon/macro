@@ -22,6 +22,8 @@
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsPPCrossSection.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsSignalExtraction.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsAcceptanceEfficiency.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsRaa.C>
+
 
 //nombre de pt bins pour chaque classe en centralité de 0-10% à 70-90%
 int nRanges[5]={15, 15, 15, 14, 13}; 
@@ -215,4 +217,57 @@ void ExportResultsRAAvsCent(Double_t minY, Double_t maxY)
             ComputeRAAvsCent(minY, maxY, ptRange[i], ptRange[i+1], cent[j], cent[j+1]);
         }
     }     
+}
+
+void extractSigmaDiff(Int_t minCent, Int_t maxCent, Double_t minPt1, Double_t maxPt1, Double_t minPt2, Double_t maxPt2, Double_t minY, Double_t maxY)
+{
+    Int_t iCent=0;
+    if (minCent==0) iCent=0;
+    else if (minCent==10) iCent=1;
+    else if (minCent==30) iCent=2;
+    else if (minCent==50) iCent=3;
+    else iCent=4;
+
+
+    Double_t nRaa1;
+    Double_t errRaa1_stat;
+    Double_t errRaa1_syst;
+    Double_t errRaa1_global;
+    
+    Double_t nRaa2;
+    Double_t errRaa2_stat;
+    Double_t errRaa2_syst;
+    Double_t errRaa2_global;
+
+    std::vector<Double_t> vectNJpsi1 = SignalResultsLowPt[SetRangeValue(kRawYield, minY, maxY, minPt1, maxPt1, minCent, maxCent)];
+    std::vector<Double_t> vectAccEff1 = AccEffHadro[SetRangeValue(kAccEff, minY, maxY, minPt1, maxPt1, minCent, maxCent)];
+    std::vector<Double_t> vectCRpp1 = ppCrossSection[SetRangeValue(kCRpp, minY, maxY, minPt1, maxPt1)];
+    Double_t MCinput1_correlations = SystMCinput_correlations[SetNameSystAccEff(minY, maxY, minPt1, maxPt1)][0];
+    Double_t effMTRresponse1 = SystEffMTR[SetNameSystAccEff(minY, maxY, minPt1, maxPt1)][0];
+
+
+    std::vector<Double_t> vectNJpsi2 = SignalResultsLowPt[SetRangeValue(kRawYield, minY, maxY, minPt2, maxPt2, minCent, maxCent)];
+    std::vector<Double_t> vectAccEff2 = AccEffHadro[SetRangeValue(kAccEff, minY, maxY, minPt2, maxPt2, minCent, maxCent)];
+    std::vector<Double_t> vectCRpp2 = ppCrossSection[SetRangeValue(kCRpp, minY, maxY, minPt2, maxPt2)];
+    Double_t MCinput2_correlations = SystMCinput_correlations[SetNameSystAccEff(minY, maxY, minPt2, maxPt2)][0];
+    Double_t effMTRresponse2 = SystEffMTR[SetNameSystAccEff(minY, maxY, minPt2, maxPt2)][0];
+
+    
+    nRaa1=vectNJpsi1[kJpsiMean]/(nBranchinRatio*nMB[iCent]*vectAccEff1[kAccEffValue]*nTaa[iCent]*TMath::Power(10,-3)*(vectCRpp1[kCRppValue]*drapidité*(maxPt1-minPt1)));
+    errRaa1_stat=TMath::Sqrt(TMath::Power((vectNJpsi1[kJpsiStatError]/vectNJpsi1[kJpsiMean]), 2)  +  TMath::Power((vectAccEff1[kAccEffStatError]/vectAccEff1[kAccEffValue]), 2)  +  TMath::Power((vectCRpp1[kCRppStatError]/vectCRpp1[kCRppValue]), 2))*nRaa1;
+    errRaa1_syst=TMath::Sqrt(TMath::Power((vectNJpsi1[kJpsiSysError]/vectNJpsi1[kJpsiMean]), 2) + TMath::Power(MC_inputVSpt_stat/100, 2) + TMath::Power(MCinput1_correlations/100, 2) +  TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse1/100), 2) + TMath::Power((EffMTR/100), 2)  + TMath::Power(0.01, 2) + TMath::Power((vectCRpp1[kCRppSystError]/vectCRpp1[kCRppValue]), 2)) * nRaa1;
+
+    nRaa2=vectNJpsi2[kJpsiMean]/(nBranchinRatio*nMB[iCent]*vectAccEff2[kAccEffValue]*nTaa[iCent]*TMath::Power(10,-3)*(vectCRpp2[kCRppValue]*drapidité*(maxPt2-minPt2)));
+    errRaa2_stat=TMath::Sqrt(TMath::Power((vectNJpsi2[kJpsiStatError]/vectNJpsi2[kJpsiMean]), 2)  +  TMath::Power((vectAccEff2[kAccEffStatError]/vectAccEff2[kAccEffValue]), 2)  +  TMath::Power((vectCRpp2[kCRppStatError]/vectCRpp2[kCRppValue]), 2))*nRaa2;
+    errRaa2_syst=TMath::Sqrt(TMath::Power((vectNJpsi2[kJpsiSysError]/vectNJpsi2[kJpsiMean]), 2) + TMath::Power(MC_inputVSpt_stat/100, 2) + TMath::Power(MCinput2_correlations/100, 2) +  TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse2/100), 2) + TMath::Power((EffMTR/100), 2)  + TMath::Power(0.01, 2) + TMath::Power((vectCRpp2[kCRppSystError]/vectCRpp2[kCRppValue]), 2)) * nRaa2;
+
+
+    TString sName1 = SetRangeValue(kRaa, minY, maxY, minPt1, maxPt1, minCent, maxCent);
+    printf("{\"%s\", {%.8f, %.8f, %.8f }},\n", sName1.Data(), nRaa1, errRaa1_stat, errRaa1_syst);
+    TString sName2 = SetRangeValue(kRaa, minY, maxY, minPt2, maxPt2, minCent, maxCent);
+    printf("{\"%s\", {%.8f, %.8f, %.8f }},\n", sName2.Data(), nRaa2, errRaa2_stat, errRaa2_syst);
+
+    Double_t sigma;
+    sigma = TMath::Sqrt(TMath::Power(errRaa1_stat, 2)+TMath::Power(errRaa1_syst, 2)+TMath::Power(errRaa2_stat, 2)+TMath::Power(errRaa2_syst, 2));
+    printf("Difference is %.2f, with sigma %.2f given a deviation of %.2f\n", TMath::Abs(nRaa1-nRaa2), sigma, TMath::Abs(nRaa1-nRaa2)/sigma);
 }

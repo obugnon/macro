@@ -30,14 +30,14 @@ int maxCent[5]={90,70,50,30,10};
 
 Double_t nPart[5]={11.35,42.66,108.97,224.95, 357.3};
 
-Double_t minPt[3]={1,0.3,0};
-Double_t maxPt[3]={2,1, 0.3};
+Double_t minPt[3]={1, 0.3, 0};
+Double_t maxPt[3]={2, 1, 0.3};
 
 int nColor[3]={kBlack, kBlue, kRed};
 int nMarker[3]={22, 21, 20};
 
 
-void ResultsHadro()
+void DrawExcessRaaVScentrality()
 {
   TCanvas *cRawNumber = new TCanvas("c1","Raa of Jpsi");
     TH1F *fOption = new TH1F("Raa of Jpsi","", 40, 0, 400);
@@ -53,10 +53,14 @@ void ResultsHadro()
     TLegend* dlegend = new TLegend(0.1,0.7,0.48,0.9);
     gStyle->SetLegendBorderSize(0);
     // dlegend->SetHeader("The Legend Title","C"); // option "C" allows to center the header
-    dlegend->AddEntry((TObject*)0, "Asked for preliminary", "");
-    dlegend->AddEntry((TObject*)0, "", "");
-    dlegend->AddEntry((TObject*)0, "Pb-Pb collisions #sqrt{s_{NN} }= 5.02 TeV", "");
-    dlegend->AddEntry((TObject*)0,"-4 < y < -2.5",""); 
+    TLatex * text = new TLatex (1.2,1.32,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
+    text->Draw("SAME");
+    text->SetTextSizePixels(20);
+
+    TLatex * text1 = new TLatex (8,1.32,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
+    text1->SetTextSizePixels(18);
+    text1->Draw("SAME");
+
 
     for(int i=0; i<3; i++)
     {
@@ -64,6 +68,7 @@ void ResultsHadro()
       if (i==0) iGlobalError = 2;
       else if (i==1) iGlobalError = 1; 
       else if (i==2) iGlobalError = 0; 
+
     
       TGraphErrors* gr_syst = new TGraphErrors(5);
       

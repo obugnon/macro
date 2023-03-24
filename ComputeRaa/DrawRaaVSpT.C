@@ -25,7 +25,7 @@
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
-void DrawRaaVSpt(Int_t minCent, Int_t maxCent)
+void DrawHadronicRaaVSpt(Int_t minCent, Int_t maxCent)
 {
   //tableaux de la valeur moyenne du bin, de son ecart type et de sa valeur inférieure
   std::vector<std::vector<Double_t>> xRange;
@@ -89,8 +89,10 @@ void DrawRaaVSpt(Int_t minCent, Int_t maxCent)
   terrRaa_syst = &errRaa_syst[0];
 
   TCanvas *cRawNumber = new TCanvas("c1","Raa of Jpsi");
+  cRawNumber->SetRightMargin(0.03);
+  cRawNumber->SetTopMargin(0.03);
   TH1F *fOption = new TH1F("Jpsi Raa","", 15, 0, 15);
-  fOption->GetYaxis()->SetTitle("J/#psi R_{AA}");
+  fOption->GetYaxis()->SetTitle("R_{AA} (J/#psi)");
   fOption->GetYaxis()->SetRangeUser(0.1, 1.4);  
   fOption->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   fOption->SetMaximum(12);
@@ -133,15 +135,21 @@ void DrawRaaVSpt(Int_t minCent, Int_t maxCent)
 
    
   //legend
-  TLegend* dlegend = new TLegend(0.4,0.7,0.8,0.89);
-  dlegend->SetBorderSize(0);
-  dlegend->AddEntry((TObject*)0, "Pb-Pb collisions #sqrt{s_{NN} }= 5.02 TeV", "");
-  dlegend->AddEntry((TObject*)0,"-4 < y < -2.5","");
-  dlegend->AddEntry((TObject*)0,Form("%i-%i %%",minCent,maxCent),"");
-  dlegend->AddEntry((TObject*)0,"","");
+    TLatex * text = new TLatex (1.2,1.32,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  text->Draw("SAME");
+  text->SetTextSizePixels(20);
 
+  TLatex * text1 = new TLatex (1.2,1.21,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
+  text1->SetTextSizePixels(18);
+  text1->Draw("SAME");
+
+  TLatex * text2 = new TLatex (1.2,1.12,Form("%i-%i %%",minCent,maxCent));
+  text2->SetTextSizePixels(18);
+  text2->Draw("SAME");
+
+  TLegend* dlegend = new TLegend(0.4,0.7,0.8,0.89);
   dlegend->AddEntry(gr1_stat,"L_{int} = 750 #mub^{-1}" ,"lep");
-  dlegend->AddEntry(gr1_syst,"uncorrelated systematic uncertainty","f");
+  dlegend->AddEntry(gr1_syst,"Uncorrelated systematic uncertainty","f");
 
   
   dlegend->Draw();
