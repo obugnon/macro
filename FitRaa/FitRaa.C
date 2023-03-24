@@ -78,8 +78,8 @@ TH1D* GetRAAGraph(Int_t minCent, Int_t maxCent, Bool_t isErrStatOnly, Bool_t isE
     tLowEdge = &xLowEdge[iCent][0];
 
     TH1D* graph = new TH1D("J/psi Raa", "", nBins, tLowEdge);
-    graph->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    graph->GetYaxis()->SetTitle("R_{AA}^{J/#psi}");
+    graph->GetXaxis()->SetTitle("#it{p}_{T} (GeV/#it{c})");
+    graph->GetYaxis()->SetTitle("#it{R}_{AA} (J/#psi)");
     graph->SetMarkerColor(kBlue);
     graph->SetLineColor(kBlue);
     graph->SetFillColor(kBlue);
@@ -273,15 +273,29 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
 {
     //Data
     TCanvas *cRaa = new TCanvas(Form("%d-%d%%",minCent, maxCent),"J/#psi Raa");
+    cRaa->SetRightMargin(0.03);
+    cRaa->SetTopMargin(0.03);
     TH1D* graphRaa = GetRAAGraph(minCent, maxCent, kFALSE, kFALSE);
-    graphRaa->SetTitle(Form("%d-%d%%", minCent, maxCent));
+    // graphRaa->SetTitle(Form("%d-%d%%", minCent, maxCent));
     graphRaa->SetMarkerColor(kBlack);
     graphRaa->SetLineColor(kBlack);
     graphRaa->SetFillColor(kBlack);
     graphRaa->SetMarkerStyle(8);
     graphRaa->Draw();
-    graphRaa->GetYaxis()->SetRangeUser(0.1, 1);
+    graphRaa->GetYaxis()->SetRangeUser(0.1, 1.4);
     gStyle->SetOptStat(0000);
+
+    TLatex * text = new TLatex (6,1.3,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
+    text->Draw("SAME");
+    text->SetTextSizePixels(20);
+
+    TLatex * text1 = new TLatex (6,1.18,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
+    text1->SetTextSizePixels(18);
+    text1->Draw("SAME");
+
+    TLatex * text2 = new TLatex (6,1.1,Form("%i-%i %%",minCent,maxCent));
+    text2->SetTextSizePixels(18);
+    text2->Draw("SAME");
 
     //TF1 file
     TFile *inputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsRaa.root");
@@ -323,7 +337,7 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
 
     TLegend* legend = new TLegend(0.4,0.6,0.89,0.89);
     legend->SetBorderSize(0);
-    legend->SetHeader("J/#psi R_{AA}","C");
+    // legend->SetHeader("J/#psi R_{AA}","C");
     TString sLegend;
 
     TF1* currentFunction;
@@ -333,7 +347,7 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
         {
             sRange = SetRangeFunction(-4,-2.5, minCent, maxCent); 
             sTest = SetNameTest(kRaa, fFit[j], kFALSE, kFALSE, tMinFit[i], 15, tabPt0[j]);
-            //if(j==2 || (j>3 && tMinFit[i]==1)) continue;
+            // if(j==2 || (j>3 && tMinFit[i]==1)) continue;
 
             inputList = (TDirectory*) inputFile->Get(Form("%s_%s", sRange.Data(), sTest.Data()));
             inputList->GetObject("parameters", vect);
@@ -350,10 +364,10 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
             switch (fFit[j])
             {
                 case kWoodSaxonFixed:
-                sLegend = Form("WS with p_{T0} = %.3f", tabPt0[j]);
+                sLegend = Form("WS #it{p}_{T0} = %.3f", tabPt0[j]);
                 break;
                 case kWoodSaxonFree:
-                sLegend = "WS free parameters";
+                sLegend = "WS free #it{p}_{T0}";
                 break;
                 case kPol1:
                 sLegend = "Linear fit";
@@ -365,7 +379,9 @@ void DrawMultipleFits(Int_t minCent, Int_t maxCent)
                 sLegend = "Constant fit";
                 break;
             }
-            legend->AddEntry(currentFunction, Form("%s, fitting range %.2f-15 GeV/c, #chi^{2}=%.2f", sLegend.Data(), tMinFit[i], chi2), "l");
+            if(tMinFit[i] == 0.65) legend->AddEntry(currentFunction, Form("%s, [%.2f-15] GeV/#it{c}, #chi^{2}/NDF = %.2f", sLegend.Data(), tMinFit[i], chi2), "l");
+
+            else legend->AddEntry(currentFunction, Form("%s, [%.f-15] GeV/#it{c}, #chi^{2}/NDF = %.2f", sLegend.Data(), tMinFit[i], chi2), "l");
         }
     }
     legend->Draw();

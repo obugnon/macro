@@ -85,7 +85,7 @@ TH1D* GetAccEffGraph(Double_t minCent, Double_t maxCent, Bool_t isErrStatOnly, B
 
     TH1D* graph = new TH1D("J/psi Acceptance Efficiency", "", nBins, tLowEdge);
     graph->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    graph->GetYaxis()->SetTitle("A#times#epsilon");
+    graph->GetYaxis()->SetTitle("A#times#epsilon (J/#psi)");
     graph->SetMarkerColor(kBlue);
     graph->SetLineColor(kBlue);
     graph->SetFillColor(kBlue);
@@ -235,4 +235,123 @@ void MultipleFitAcceptanceEfficiency(Bool_t isSaved)
         }
     }
 
+}
+//___________________________________________________________________________________________________________
+//___________________________________________________________________________________________________________
+void DrawMultipleFits(Int_t minCent, Int_t maxCent)
+{
+    //Data
+    TCanvas *cAccEff = new TCanvas("","J/#psi Acceptance Efficiency");
+    cAccEff->SetRightMargin(0.03);
+    cAccEff->SetTopMargin(0.03);
+    TH1D* graphAccEff = GetAccEffGraph(minCent, maxCent, kTRUE, kFALSE, -4, -2.5);
+    graphAccEff->SetMarkerColor(kBlack);
+    graphAccEff->SetLineColor(kBlack);
+    graphAccEff->SetFillColor(kBlack);
+    graphAccEff->SetMarkerStyle(8);
+    graphAccEff->Draw();
+    graphAccEff->GetYaxis()->SetRangeUser(0.09, 0.5);
+    graphAccEff->GetXaxis()->SetRangeUser(0, 10);
+    gStyle->SetOptStat(0000);
+
+    TLatex * text = new TLatex (0.5,0.45,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
+    text->Draw("SAME");
+    text->SetTextSizePixels(20);
+
+    TLatex * text1 = new TLatex (0.5,0.405,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
+    text1->SetTextSizePixels(18);
+    text1->Draw("SAME");
+
+    TLatex * text2 = new TLatex (0.5,0.375,Form("%i-%i %%",minCent,maxCent));
+    text2->SetTextSizePixels(18);
+    text2->Draw("SAME");
+
+    //TF1 file
+    TFile *inputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsAcceptanceEfficiency.root");
+    TDirectory *inputList ;
+    std::vector<std::vector<Double_t>> *vect;
+    std::vector<std::vector<Double_t>> vectParam;
+    Double_t chi2;
+
+    TString sRange;
+    TString sTest;
+
+    //Tests
+    int nTests;
+    std::vector<eFunction> fFit;
+
+    Int_t iCent; 
+    if(minCent == 30 && maxCent == 50) iCent = 2;
+    else if(minCent == 10 && maxCent == 30) iCent = 1; 
+    else iCent = 0 ;
+
+    nTests = 2;
+    fFit={kPol3, kRatioLevy};
+
+    Int_t color[2]={kAzure-1, kRed+1};
+    Int_t style[2]={7, 10};
+
+    TLegend* legend = new TLegend(0.4,0.6,0.89,0.89);
+    legend->SetBorderSize(0);
+    // legend->SetHeader("J/#psi R_{AA}","C");
+    TString sLegend;
+
+    TF1* currentFunction;
+
+    for(int j=0; j<nTests; j++)
+    {
+        sRange = SetRangeFunction(-4,-2.5, minCent, maxCent); 
+        sTest = SetNameTest(kAccEff, fFit[j], kTRUE, kFALSE, 0, 10);
+        
+
+        inputList = (TDirectory*) inputFile->Get(Form("%s_%s", sRange.Data(), sTest.Data()));
+        inputList->GetObject("parameters", vect);
+        vectParam = *vect;
+    
+        Int_t nPar = vectParam[0].size();
+        Double_t parameters[nPar-1];
+        Double_t parametersErrors[nPar-1];
+
+        for(int i=0; i<vectParam[0].size()-1; i++)
+        {
+            parameters[i]=vectParam[0][i];
+            parametersErrors[i]=vectParam[1][i];
+
+        }
+        chi2=vectParam[0][vectParam[0].size()-1];
+        // printf("chi2/NDF = %.3f\n", chi2);
+
+        if (fFit[j] == kRatioLevy)
+        {
+            currentFunction = GetRatioLevyFunction(0.12, minFit, maxFit);
+        }
+        else if (fFit[j] == kPol3)
+        {
+            currentFunction = GetPol3Function(0.15, minFit, maxFit);
+        }
+        
+        currentFunction->SetParameters(parameters);
+        currentFunction->SetParErrors(parametersErrors);
+        // currentFunction = (TF1*)inputList->Get("function");
+        currentFunction->SetLineColor(color[j]);
+        currentFunction->SetLineStyle(style[j]);
+        currentFunction->SetLineWidth(3);
+
+        currentFunction->Draw("SAME");
+
+        switch (fFit[j])
+        {
+            case kPol3:
+            sLegend = "3rd degree polynomial";
+            break;
+            case kRatioLevy:
+            sLegend = "Ratio of Levy functions";
+            break;
+        }
+        legend->AddEntry(currentFunction, Form("%s, [0-10] GeV/#it{c}, #chi^{2}/NDF = %.2f", sLegend.Data(),chi2), "l");
+        
+    }
+    legend->Draw();
+
+ 
 }

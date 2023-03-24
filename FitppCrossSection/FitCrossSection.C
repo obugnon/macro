@@ -50,8 +50,8 @@ TH1D* GetppGraph(Bool_t isErrStatOnly, Bool_t isErrSystOnly)
     Double_t errCrossSect;
 
     TH1D* graph = new TH1D("J/psi differential pp cross section", "", nBins, xLowEdge);
-    graph->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    graph->GetYaxis()->SetTitle("d^{2}#sigma_{J/#psi}/dp_{T}dy (#mub/(GeV/c))");
+    graph->GetXaxis()->SetTitle("#it{p}_{T} (GeV/#it{c})");
+    graph->GetYaxis()->SetTitle("d^{2}#sigma_{J/#psi}/d#it{p}_{T}d#it{y} (#mub/(GeV/#it{c}))");
     graph->SetMarkerColor(kBlue);
     graph->SetLineColor(kBlue);
     graph->SetFillColor(kBlue);
@@ -176,4 +176,91 @@ std::vector<Double_t> FitCrossSection(eFunction fitFunction, Bool_t isErrStatOnl
     }
 
     return fitResult;
+}
+
+//___________________________________________________________________________________________________________
+//___________________________________________________________________________________________________________
+void DrawMultipleFits()
+{
+    //Data
+    TCanvas *cPPcrosssection = new TCanvas("","J/#psi differential pp cross section");
+    cPPcrosssection->SetRightMargin(0.03);
+    cPPcrosssection->SetTopMargin(0.03);
+    TH1D* graphPP = GetppGraph(kFALSE, kFALSE);
+    // graphRaa->SetTitle(Form("%d-%d%%", minCent, maxCent));
+    graphPP->SetMarkerColor(kBlack);
+    graphPP->SetLineColor(kBlack);
+    graphPP->SetFillColor(kBlack);
+    graphPP->SetMarkerStyle(8);
+    graphPP->Draw();
+    graphPP->GetYaxis()->SetRangeUser(0.001, 2);
+    gStyle->SetOptStat(0000);
+
+    TLatex * text = new TLatex (6,1.3,"pp #sqrt{#it{s}_{NN}} = 5.02 TeV");
+    text->Draw("SAME");
+    text->SetTextSizePixels(20);
+
+    TLatex * text1 = new TLatex (6,1.18,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
+    text1->SetTextSizePixels(18);
+    text1->Draw("SAME");
+
+
+    //TF1 file
+    TFile *inputFile = new TFile("$LOWPT/macro/ResultFiles/FitFunctionsCRpp.root");
+    TDirectory *inputList ;
+    std::vector<std::vector<Double_t>> *vect;
+    std::vector<std::vector<Double_t>> parameters;
+    Double_t chi2;
+
+    TString sRange;
+    TString sTest;
+
+    //Tests
+    int nTests;
+    std::vector<eFunction> fFit;
+
+    nTests = 3;
+    fFit={kPowLawFree, kPowLawFixed, kLevy};
+
+    Int_t color[5]={kRed+1, kAzure-1, kGreen+2};
+
+    TLegend* legend = new TLegend(0.4,0.6,0.89,0.89);
+    legend->SetBorderSize(0);
+    TString sLegend;
+
+    TF1* currentFunction;
+
+    for(int j=0; j<nTests; j++)
+    {
+        TString sTest = SetNameTest(kCRpp, fFit[j], kFALSE, kFALSE);
+
+        inputList = (TDirectory*) inputFile->Get(Form("%s", sTest.Data()));
+        inputList->GetObject("parameters", vect);
+        parameters = *vect;
+        chi2=parameters[0][parameters[0].size()-1];
+        // printf("chi2/NDF = %.3f\n", chi2);
+
+        currentFunction = (TF1*)inputList->Get("function");
+        currentFunction->SetLineColor(color[j]);
+
+        currentFunction->Draw("SAME");
+
+        switch (fFit[j])
+        {
+            case kPowLawFixed:
+            sLegend = "Powerlaw D = 2";
+            break;
+            case kPowLawFree:
+            sLegend = "Powerlaw D free";
+            break;
+            case kLevy:
+            sLegend = "Levy function";
+            break;
+        }
+        legend->AddEntry(currentFunction, Form("%s, [0-15] GeV/#it{c}, #chi^{2}/NDF = %.2f", sLegend.Data(), chi2), "l");
+        
+    }
+    legend->Draw();
+
+ 
 }
