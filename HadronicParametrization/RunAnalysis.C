@@ -71,34 +71,34 @@ std::vector<Double_t> RunSingleAnalysis(eFunction fRaa=kPol1, eFunction fCRpp=kP
     Double_t errRatio = TMath::Sqrt(Err2[0][0]);
     Double_t errRelatRation = errRatio/valueRatio*100;
 
-    // std::cout << "Value of the ratio is " << valueRatio << " with uncertainty " << errRatio  <<"(" << errRelatRation << "%)"<< std::endl;
+    std::cout << "Value of the ratio is " << valueRatio << " with uncertainty " << errRatio  <<"(" << errRelatRation << "%)"<< std::endl;
 
     //Compute each contribution to sigma R
-    // TMatrixDSym covMatrixRaa = GetExtendedCovarianceMatrix(kRaa, sRange, sTestRaa, sTestCRpp, sTestAccEff);
-    // TMatrixD tmpRaa(jac, TMatrixD::kMult, covMatrixRaa);
-    // TMatrixD Err2Raa(tmpRaa, TMatrixD::kMultTranspose, jac);
-    // Double_t errRatioRaa = TMath::Sqrt(Err2Raa[0][0]);
-    // Double_t errRelatRationRaa = errRatioRaa/valueRatio*100;
+    TMatrixDSym covMatrixRaa = GetExtendedCovarianceMatrix(kRaa, sRange, sTestRaa, sTestCRpp, sTestAccEff);
+    TMatrixD tmpRaa(jac, TMatrixD::kMult, covMatrixRaa);
+    TMatrixD Err2Raa(tmpRaa, TMatrixD::kMultTranspose, jac);
+    Double_t errRatioRaa = TMath::Sqrt(Err2Raa[0][0]);
+    Double_t errRelatRationRaa = errRatioRaa/valueRatio*100;
     // covMatrixRaa.Print();
-    // std::cout << "Contribution from Raa is " << errRatioRaa << "    (" << errRelatRationRaa << "%)" << std::endl;
+    std::cout << "Contribution from Raa is " << errRatioRaa << "    (" << errRelatRationRaa << "%)" << std::endl;
 
 
-    // TMatrixDSym covMatrixCRpp = GetExtendedCovarianceMatrix(kCRpp, sRange, sTestRaa, sTestCRpp, sTestAccEff);
-    // TMatrixD tmpCRpp(jac, TMatrixD::kMult, covMatrixCRpp);
-    // TMatrixD Err2CRpp(tmpCRpp, TMatrixD::kMultTranspose, jac);
-    // Double_t errRatioCRpp = TMath::Sqrt(Err2CRpp[0][0]);
-    // Double_t errRelatRationCRpp = errRatioCRpp/valueRatio*100;
+    TMatrixDSym covMatrixCRpp = GetExtendedCovarianceMatrix(kCRpp, sRange, sTestRaa, sTestCRpp, sTestAccEff);
+    TMatrixD tmpCRpp(jac, TMatrixD::kMult, covMatrixCRpp);
+    TMatrixD Err2CRpp(tmpCRpp, TMatrixD::kMultTranspose, jac);
+    Double_t errRatioCRpp = TMath::Sqrt(Err2CRpp[0][0]);
+    Double_t errRelatRationCRpp = errRatioCRpp/valueRatio*100;
     // covMatrixCRpp.Print();
-    // std::cout << "Contribution from CR pp is " << errRatioCRpp << "    (" << errRelatRationCRpp << "%)" << std::endl;
+    std::cout << "Contribution from CR pp is " << errRatioCRpp << "    (" << errRelatRationCRpp << "%)" << std::endl;
 
 
-    // TMatrixDSym covMatrixAccEff = GetExtendedCovarianceMatrix(kAccEff, sRange, sTestRaa, sTestCRpp, sTestAccEff);
-    // TMatrixD tmpAccEff(jac, TMatrixD::kMult, covMatrixAccEff);
-    // TMatrixD Err2AccEff(tmpAccEff, TMatrixD::kMultTranspose, jac);
-    // Double_t errRatioAccEff = TMath::Sqrt(Err2AccEff[0][0]);
-    // Double_t errRelatRationAccEff = errRatioAccEff/valueRatio*100;
+    TMatrixDSym covMatrixAccEff = GetExtendedCovarianceMatrix(kAccEff, sRange, sTestRaa, sTestCRpp, sTestAccEff);
+    TMatrixD tmpAccEff(jac, TMatrixD::kMult, covMatrixAccEff);
+    TMatrixD Err2AccEff(tmpAccEff, TMatrixD::kMultTranspose, jac);
+    Double_t errRatioAccEff = TMath::Sqrt(Err2AccEff[0][0]);
+    Double_t errRelatRationAccEff = errRatioAccEff/valueRatio*100;
     // covMatrixAccEff.Print();
-    // std::cout << "Contribution from Acc Eff is " << errRatioAccEff << "    (" << errRelatRationAccEff << "%)" << std::endl;
+    std::cout << "Contribution from Acc Eff is " << errRatioAccEff << "    (" << errRelatRationAccEff << "%)" << std::endl;
 
 
     //GetNumber of Jpsi in 1-8 GeV/c
