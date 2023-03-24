@@ -37,10 +37,6 @@ void GetAccEff(int minCent, int maxCent, int iter, Bool_t isOtherRange)
         return ;
     }
 
-    // TFile* results_stat;
-    // if (isOtherRange) results_stat = TFile::Open(Form("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Hadro_Finer_binning/Cent-%ito%i/AccEffStat/AccEffiValues.root", minCent, maxCent));
-    // else results_stat = TFile::Open(Form("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Hadro/Cent-%ito%i/AccEffStat/AccEffiValues.root", minCent, maxCent));
-
     TFile* results_syst;
     if (isOtherRange) results_syst = TFile::Open(Form("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Hadro_Finer_binning/Cent-%ito%i/AccEffSyst/AccEffiValues.root", minCent, maxCent));
     else results_syst = TFile::Open(Form("/Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/AcceptanceEfficiency/AccEff_Hadro/Cent-%ito%i/AccEffSyst/AccEffiValues.root", minCent, maxCent));
