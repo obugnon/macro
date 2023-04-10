@@ -62,7 +62,7 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
         if(fBackGround==kDoubleExp) invMassDist = GetInvMassHisto(analysis, minMass, maxMass, minPt, maxPt, minCent, maxCent);
         else invMassDist = GetInvMassHisto(analysis, minMass, maxMass, minPt, maxPt, minY, maxY, minCent, maxCent, estimator);
         invMassDist->SetBinErrorOption(TH1::kPoisson);
-        invMassDist->SetTitle(Form("test %s in range %s", nameTest.Data(), rangeNameFull.Data()));
+        // invMassDist->SetTitle(Form("test %s in range %s", nameTest.Data(), rangeNameFull.Data()));
         // invMassDist->Draw();
 
 	//Fit Background
@@ -207,6 +207,8 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
         if(isDisplayed==kTRUE)
         {
             TCanvas* cInvMassDist = new TCanvas(Form("%s_%s",rangeNameFull.Data(), nameTest.Data()), Form("Range %s for test %s",rangeNameFull.Data(), nameTest.Data()));
+            cInvMassDist->SetRightMargin(0.03);
+            cInvMassDist->SetTopMargin(0.03);
             gStyle->SetOptFit(1111);
             gStyle->SetOptFit(0);
             gStyle->SetOptStat(0);
@@ -228,11 +230,11 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
             Psi2SFunction->Draw("SAME");
 
         //Set Legend
-            TLatex* text = new TLatex();
-            text->SetNDC();
-            text->SetTextAlign(12);
-            text->SetTextFont(43);
-            text->SetTextSize(15);
+            // TLatex* text = new TLatex();
+            // text->SetNDC();
+            // text->SetTextAlign(12);
+            // text->SetTextFont(43);
+            // text->SetTextSize(15);
 
             // text->DrawLatex(0.62, 0.85, "Pb-Pb collisions at 5.02 TeV");
             // text->DrawLatex(0.62, 0.80, Form("%i-%i %%",minCent, maxCent));
@@ -241,14 +243,14 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
             // text->DrawLatex(0.62, 0.68, Form("N_{J/#psi} = %i #pm %i",TMath::Nint(N_JPsi),TMath::Nint(Err_JPsi)));
 
             
-            text->DrawLatex(0.65, 0.88, Form("N_{J/#psi} = %i #pm %i",TMath::Nint(N_JPsi),TMath::Nint(Err_JPsi)));
-            for (int np = 0; np < nb_sig + 1; np++)
-            {
-               text->DrawLatex(0.65, 0.84-np*0.04, Form("%s = %.3f #pm %.3f", fitFunction->GetParName(np+nb_bg), fitFunction->GetParameter(np+nb_bg), fitFunction->GetParError(np+nb_bg)));
-            }
-            text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig-2)*0.04, Form("#chi^{2}/NDF = %.3f", chi22) );
-            text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig-1)*0.04, Form("Fit status = %i", (int)fitStatus) );
-            text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig)*0.04, Form("Cov matrix status = %i", covMatrixStatus2) );
+            // text->DrawLatex(0.65, 0.88, Form("N_{J/#psi} = %i #pm %i",TMath::Nint(N_JPsi),TMath::Nint(Err_JPsi)));
+            // for (int np = 0; np < nb_sig + 1; np++)
+            // {
+            //    text->DrawLatex(0.65, 0.84-np*0.04, Form("%s = %.3f #pm %.3f", fitFunction->GetParName(np+nb_bg), fitFunction->GetParameter(np+nb_bg), fitFunction->GetParError(np+nb_bg)));
+            // }
+            // text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig-2)*0.04, Form("#chi^{2}/NDF = %.3f", chi22) );
+            // text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig-1)*0.04, Form("Fit status = %i", (int)fitStatus) );
+            // text->DrawLatex(0.65, 0.84-(nb_bg + nb_sig)*0.04, Form("Cov matrix status = %i", covMatrixStatus2) );
 
             // TLatex * tex = new TLatex(0.6, 0.85,"Work in progress");
             // tex->SetNDC();
@@ -263,6 +265,43 @@ std::vector<Double_t> SignalExtraction(const char* file, Double_t minY, Double_t
             // dlegend->AddEntry((TObject*)0,"#it{p}_{T} < 0.3 GeV/#it{c}",""); 
             // dlegend->AddEntry((TObject*)0, "", "");
             // dlegend->Draw();
+
+            //pour la thèse
+            invMassDist->SetTitle(Form("Test %s", nameTest.Data()));
+            TLatex * text = new TLatex ();
+            text->SetNDC();
+            text->SetTextAlign(12);
+            text->SetTextFont(43);
+            text->SetTextSize(19);
+            text->DrawLatex(0.7, 0.9,"Pb-Pb #sqrt{s_{NN}} = 5.02 TeV");
+            TLatex * text2 = new TLatex ();
+            text2->SetNDC();
+            text2->SetTextAlign(12);
+            text2->SetTextFont(43);
+            text2->SetTextSize(17);
+            text2->DrawLatex(0.7, 0.85,Form("Centrality %i-%i%%", minCent, maxCent));
+            text2->DrawLatex(0.7, 0.81,"2.5 < #it{y} < 4");
+            // text2->DrawLatex(0.7, 0.77,Form("%.1f < #it{p}_{T} < %.1f GeV/#it{c}", minPt, maxPt));
+            text2->DrawLatex(0.7, 0.77,Form("#it{p}_{T} < %.1f GeV/#it{c}",maxPt));
+            TLatex * text3 = new TLatex ();
+            text3->SetNDC();
+            text3->SetTextAlign(12);
+            text3->SetTextFont(43);
+            text3->SetTextSize(15);
+            text3->DrawLatex(0.7, 0.68, Form("N_{J/#psi} = %i #pm %i",TMath::Nint(N_JPsi),TMath::Nint(Err_JPsi)));
+            for (int np = 1; np < 3; np++)
+            {
+               text3->DrawLatex(0.7, 0.68-np*0.04, Form("%s = %.3f #pm %.3f", fitFunction->GetParName(np+nb_bg), fitFunction->GetParameter(np+nb_bg), fitFunction->GetParError(np+nb_bg)));
+            }
+            text3->DrawLatex(0.7, 0.68-3*0.04, Form("#chi^{2}/NDF = %.3f", chi22) );
+            
+            // text->DrawLatex(0.6, 0.85,"ALICE, Pb-Pb #sqrt{s_{NN}} = 5.02 TeV");
+            // text2->DrawLatex(0.6, 0.8,Form("Centrality %i-%i%%", minCent, maxCent));
+            // text2->DrawLatex(0.6, 0.76,"2.5 < #it{y} < 4");
+            // text2->DrawLatex(0.6, 0.72,Form("#it{p}_{T} < %.1f GeV/#it{c}",maxPt));
+
+            // text->DrawLatex(0.34, 0.80, "J/#psi");
+            // text->DrawLatex(0.85, 0.3, "#Upsilon");
 
 
             if(isSaved) cInvMassDist->SaveAs(".pdf");
@@ -285,7 +324,7 @@ TH1* GetInvMassHisto(TFile* file, Double_t minMas, Double_t maxMass, Double_t mi
     hOppositeSign->GetAxis((int)estimator)->SetRangeUser(minCent,maxCent);
 
     TH1* invMassDist = hOppositeSign->Projection(0,"e");
-    invMassDist->GetXaxis()->SetTitle("m_{#mu#mu} GeV/c^{2}");
+    invMassDist->GetXaxis()->SetTitle("m_{#mu#mu} (GeV/c^{2})");
     invMassDist->GetYaxis()->SetTitle("Counts per 20 MeV/c^{2}");
     invMassDist->SetTitle(" ");
 

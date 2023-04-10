@@ -39,9 +39,9 @@ const int numberBackgroundFunction = 2;
 Efunction test_BackGround[numberBackgroundFunction] = {kVWGQuadratic, kPol2Pol3};
 const int numberSignalFunction = 2;
 Efunction test_Signal[numberSignalFunction] = {kCBExtended, kNA60};
-const int numberTailsTest = 4;
-Etails test_tails[numberTailsTest] = {kEMB, kPP, kSTARLIGHTcoh, kSTARLIGHTincoh};
-// Etails test_tails[numberTailsTest] = {kEMB,kPP};
+const int numberTailsTest = 2;
+// Etails test_tails[numberTailsTest] = {kEMB, kPP, kSTARLIGHTcoh, kSTARLIGHTincoh};
+Etails test_tails[numberTailsTest] = {kEMB,kPP};
 
 
 
@@ -188,7 +188,7 @@ void DrawSystematicTest(Double_t minY=min_y, Double_t maxY=max_y, Double_t minPt
         } 
     }
 
-    TString arrayYTitle[numberOfFitVariables] = {"N_{J/#psi}", "N_{#psi2S}", "#mu_{J/#psi} GeV/c", "#sigma_{J/#psi} GeV/c", "#chi^{2}/NDF"};
+    TString arrayYTitle[numberOfFitVariables] = {"N_{J/#psi}", "N_{#psi2S}", "#mu_{J/#psi} GeV/c^{2}", "#sigma_{J/#psi} GeV/c^{2}", "#chi^{2}/NDF"};
     Double_t arrayYRange[2*numberOfFitVariables] ={0, 0, 0, 0, 2.6, 3.4, 0.02, 0.09, 0, 2};
     for (int iVariable =0; iVariable<numberOfFitVariables; iVariable++) 
     {
@@ -275,7 +275,7 @@ void GetNumberSignal(Double_t minY=min_y, Double_t maxY=max_y, Double_t minPt=mi
     Int_t nb_tests = result_nb_signal.size();
     for(int m=0; m<nb_tests; m++)
     {
-        cout << result_nb_signal[m] << "pm" << error_nb_signal[m] << " with weight " << weight_test[m] << endl;
+        // cout << result_nb_signal[m] << "pm" << error_nb_signal[m] << " with weight " << weight_test[m] << endl;
         nb_signal += weight_test[m]*result_nb_signal[m];
         stat_signal += weight_test[m]*error_nb_signal[m];
         sum_weight += weight_test[m];
@@ -290,7 +290,7 @@ void GetNumberSignal(Double_t minY=min_y, Double_t maxY=max_y, Double_t minPt=mi
     nb_signal = nb_signal + 0.5 - (nb_signal<0);
     stat_signal = stat_signal + 0.5 - (stat_signal<0);
     syst_signal = syst_signal + 0.5 - (syst_signal<0);
-    printf("{\"%s\", {%d., %d., %d. }},\n", rangeName.Data(), (Int_t)nb_signal, (Int_t)stat_signal, (Int_t)syst_signal);
+    printf("{\"%s\", {%d., %d., %d. }},\\\\%.2f%%\n", rangeName.Data(), (Int_t)nb_signal, (Int_t)stat_signal, (Int_t)syst_signal, syst_signal/nb_signal*100);
     
     if(isDraw)
     {
