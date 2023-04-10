@@ -21,7 +21,7 @@
 #include "TLegend.h"
 
 
-#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultsFiles/ResultsSignalExtraction.C>
+#include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/ResultFiles/ResultsSignalExtraction.C>
 #include </Users/obugnon/Documents/ALICE/AnalyseJPsi/macro/SetRangeAndNameTest.C>
 
 
@@ -141,6 +141,7 @@ void ResultsHadro(Bool_t isDraw_dResults)
   {
     cRawNumber = new TCanvas("c1","dN_{J/#psi}/dp_{T}");
     fOption = new TH1F("dN_{J/#psi}/dp_{T}","", 15, 0, 15);
+    fOption->GetYaxis()->SetRangeUser(10, 500000);
   	fOption->GetYaxis()->SetTitle("dN_{J/#psi}/dp_{T}");
   }
   else
@@ -157,8 +158,18 @@ void ResultsHadro(Bool_t isDraw_dResults)
 
   //legend
   TLegend* legend = new TLegend(0.1,0.7,0.48,0.9);
-  legend->AddEntry((TObject*)0, "Pb-Pb collisions #sqrt{s_{NN} }= 5.02 TeV", "");
-
+  TLatex * text = new TLatex ();
+  text->SetNDC();
+  text->SetTextAlign(12);
+  text->SetTextFont(43);
+  text->SetTextSize(18);
+  text->DrawLatex(0.55, 0.85,"ALICE, Pb-Pb #sqrt{s_{NN}} = 5.02 TeV");
+  TLatex * text2 = new TLatex ();
+  text2->SetNDC();
+  text2->SetTextAlign(12);
+  text2->SetTextFont(43);
+  text2->SetTextSize(15);
+  text2->DrawLatex(0.55, 0.8,"J/#psi #rightarrow #mu^{+}#mu^{-}, 2.5 < #it{y} < 4");
   //values
   Int_t iCent;
   Int_t nBins;
