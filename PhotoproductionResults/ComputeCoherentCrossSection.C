@@ -24,10 +24,12 @@ enum kAnalysisType{kWithYield, kParam};
 //Values from with correct pT cut
 Double_t fI=0.0888;
 Double_t fD=0.0664;
-Double_t errfD=0.0114; //absolute uncertainty
-Double_t errfI=0.0338; //absolute uncertainty
-Double_t errfD_stat=0.0126; //absolute uncertainty
-Double_t errfI_stat=0.0027; //absolute uncertainty
+Double_t errfD=0.0126; //systematic final value, absolute uncertainty
+Double_t errfI=0.0338; //systematic final value, absolute uncertainty
+// Double_t errfD=0.0114; //systematic from difference with the paper, absolute uncertainty
+// Double_t errfI=0.0338; //systematic from difference with the paper, absolute uncertainty
+// Double_t errfD_stat=0.0126; //absolute uncertainty
+// Double_t errfI_stat=0.0027; //absolute uncertainty
 
 //Values from paper on excess in peripheral collisions at 2.76TeV
 // Double_t fI=0.14;
@@ -46,7 +48,7 @@ Double_t errMB = 13711845;
 Double_t inelCrossSection = 7.67; //(en b)
 Double_t errinelCrossSection = 0.3835; //(en b) //changed with public note uncertainty
 Double_t nLint = 756.3; //(inverse microbarn)
-Double_t errLint = 16.6; //absolute uncertainty (inverse microbarn)
+Double_t errLint = 18.9; //16.6 manuscrit et 18.9 papier absolute uncertainty (inverse microbarn)
 
 //___________________________________________________________________________________________________________
 //___________________________________________________________________________________________________________
@@ -110,7 +112,7 @@ void ComputeCoherentCrossSection(Int_t minCent, Int_t maxCent, Double_t minPt=0,
     std::vector<Double_t> vectHadro = HadroResultsWithParam[SetRangeValue(kRawYield, minY, maxY, minPt, maxPt, minCent, maxCent)];
     std::vector<Double_t> vectAccEff = AccEffCoherent[SetRangeValue(kAccEff, minY, maxY, minPt, maxPt, minCent, maxCent)];
 
-    Double_t effMTRresponse = SystEffMTR[SetNameSystAccEff(minY, maxY, minPt, maxPt)][0];
+    Double_t effMTRresponse = SystEffMTR_Starlight;
 
     //Number of J/psi in excess
     nExcess=vectTotal[kJpsiMean]-vectHadro[kJpsiMean];
@@ -119,7 +121,7 @@ void ComputeCoherentCrossSection(Int_t minCent, Int_t maxCent, Double_t minPt=0,
 
     //Number of J/psi from coherent photoproduction
     nCoh = nExcess/(1+fI+fD);
-    errCoh_stat = TMath::Sqrt(TMath::Power(errExcess_stat/nExcess, 2) + TMath::Power(errfD_stat/(1+fI+fD),2) + TMath::Power(errfI_stat/(1+fI+fD),2))*nCoh;
+    errCoh_stat = TMath::Sqrt(TMath::Power(errExcess_stat/nExcess, 2))*nCoh;
     errCoh_syst = TMath::Sqrt(TMath::Power(errExcess_syst/nExcess, 2) + TMath::Power(errfD/(1+fI+fD),2) + TMath::Power(errfI/(1+fI+fD),2))*nCoh;
 
     TString sName = SetRangeValue(kRawYield, minY, maxY, minPt, maxPt, minCent, maxCent);
@@ -129,7 +131,7 @@ void ComputeCoherentCrossSection(Int_t minCent, Int_t maxCent, Double_t minPt=0,
     printf("{\"%s\", {%.1f, %.1f, %.1f }},\n\n", sName.Data(), nCoh, errCoh_stat, errCoh_syst);
 
     //Cross section for J/psi coherent photoproduction
-    errCohCR_global = TMath::Power((errBranchinRatio/100), 2) + TMath::Power(errfD/(1+fI+fD),2) + TMath::Power(errfI/(1+fI+fD),2) + TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse/100), 2) + TMath::Power((EffMTR/100), 2) + TMath::Power(0.01, 2) + TMath::Power(MC_inputStarlight/100, 2) + TMath::Power(errLint/nLint, 2) ;
+    errCohCR_global = TMath::Power((errBranchinRatio/100), 2) + TMath::Power(errfD/(1+fI+fD),2) + TMath::Power(errfI/(1+fI+fD),2) + TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse/100), 2) + TMath::Power((EffMTR/100), 2) + TMath::Power(0.01, 2) + TMath::Power(MC_inputStarlight/100, 2) + TMath::Power(errLint/nLint, 2) + TMath::Power((MC_pTcut_Starlight/100), 2);
     errCohCR_global = TMath::Sqrt(errCohCR_global)*100;
 
     printf("Global error is %.3f %% \n", errCohCR_global);
@@ -176,7 +178,7 @@ void ComputeCoherentYield(Int_t minCent, Int_t maxCent, Double_t minPt=0, Double
     std::vector<Double_t> vectHadro = HadroResultsWithParam[SetRangeValue(kRawYield, minY, maxY, minPt, maxPt, minCent, maxCent)];
     std::vector<Double_t> vectAccEff = AccEffCoherent[SetRangeValue(kAccEff, minY, maxY, minPt, maxPt, minCent, maxCent)];
 
-    Double_t effMTRresponse = SystEffMTR[SetNameSystAccEff(minY, maxY, minPt, maxPt)][0];
+    Double_t effMTRresponse = SystEffMTR_Starlight;
 
     //Number of J/psi in excess
     nExcess=vectTotal[kJpsiMean]-vectHadro[kJpsiMean];
@@ -185,11 +187,11 @@ void ComputeCoherentYield(Int_t minCent, Int_t maxCent, Double_t minPt=0, Double
     
     //Number of J/psi from coherent photoproduction
     nCoh = nExcess/(1+fI+fD);
-    errCoh_stat = TMath::Sqrt(TMath::Power(errExcess_stat/nExcess, 2) + TMath::Power(errfD_stat/(1+fI+fD),2) + TMath::Power(errfI_stat/(1+fI+fD),2))*nCoh;
+    errCoh_stat = TMath::Sqrt(TMath::Power(errExcess_stat/nExcess, 2))*nCoh;
     errCoh_syst = TMath::Sqrt(TMath::Power(errExcess_syst/nExcess, 2) + TMath::Power(errfD/(1+fI+fD),2) + TMath::Power(errfI/(1+fI+fD),2))*nCoh;
 
     //Yield for J/psi coherent photoproduction
-    errCohYield_global = TMath::Power((errBranchinRatio/100), 2) + TMath::Power(errfD/(1+fI+fD),2) + TMath::Power(errfI/(1+fI+fD),2) + TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse/100), 2) + TMath::Power((EffMTR/100), 2) + TMath::Power(0.01, 2) + TMath::Power(MC_inputStarlight/100, 2) + TMath::Power(errEvMB/nEvMB, 2) ;
+    errCohYield_global = TMath::Power((errBranchinRatio/100), 2) + TMath::Power(errfD/(1+fI+fD),2) + TMath::Power(errfI/(1+fI+fD),2) + TMath::Power((EffMCH/100), 2)  + TMath::Power((effMTRresponse/100), 2) + TMath::Power((EffMTR/100), 2) + TMath::Power(0.01, 2) + TMath::Power(MC_inputStarlight/100, 2) + TMath::Power(errEvMB/nEvMB, 2) + TMath::Power((MC_pTcut_Starlight/100), 2);
     errCohYield_global = TMath::Sqrt(errCohYield_global)*100;
 
     printf("Global error is %.3f %% \n", errCohYield_global);
